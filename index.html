@@ -1,0 +1,6348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Core Java Programming – Khushboo (7018/24)</title>
+  <style>
+    /* ---------- Colors ---------- */
+    :root {
+      --bg: #ffffff;
+      --text: #222222;
+      --muted: #666666;
+      --border: #dddddd;
+      --accent: #7a2036;
+      --light: #f5f5f5;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #eeeeee;
+      --muted: #aaaaaa;
+      --border: #444444;
+      --accent: #e08aa0;
+      --light: #2a2a2a;
+    }
+
+    /* ---------- Page ---------- */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.6 Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* ---------- Header ---------- */
+    .studio-header {
+      background: var(--light);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-chip {
+      font-size: 14px;
+    }
+
+    .user-name {
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .divider,
+    .user-roll {
+      color: var(--muted);
+    }
+
+    .theme-toggle {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* ---------- Title ---------- */
+    .hero {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      color: var(--accent);
+    }
+
+    .hero p {
+      margin: 5px 0 0;
+      color: var(--muted);
+    }
+
+    /* ---------- Topics ---------- */
+    .topic-section {
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .topic-btn {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      background: var(--light);
+      color: var(--accent);
+      font: bold 15px Arial, sans-serif;
+      text-align: left;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .questions-container {
+      display: none;
+      padding: 10px;
+    }
+
+    .topic-section.open .questions-container {
+      display: block;
+    }
+
+    /* ---------- Questions ---------- */
+    .qa-item {
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .question-btn {
+      width: 100%;
+      padding: 10px;
+      border: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px Arial, sans-serif;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .qa-item.open .question-btn {
+      background: var(--light);
+      font-weight: bold;
+    }
+
+    .answer-panel {
+      display: none;
+    }
+
+    .qa-item.open .answer-panel {
+      display: block;
+    }
+
+    /* ---------- Code ---------- */
+    .codebar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      background: var(--light);
+      border-top: 1px solid var(--border);
+    }
+
+    .codebar span {
+      flex: 1;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .codebar button {
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    pre {
+      margin: 0;
+      padding: 10px;
+      overflow-x: auto;
+      font: 13px/1.5 Consolas, monospace;
+    }
+
+    pre.src {
+      background: var(--light);
+      color: var(--text);
+    }
+
+    .out-label {
+      padding: 3px 10px;
+      background: #333333;
+      color: #ffffff;
+      font-size: 12px;
+    }
+
+    pre.term {
+      background: #000000;
+      color: #ffffff;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="studio-header">
+    <div class="nav-wrapper">
+      <div class="brand-title">
+        <div class="status-dot"></div>
+        <h1>PGGC Sector 11, CHD</h1>
+      </div>
+
+      <div class="header-actions">
+        <div class="user-chip">
+          <span class="user-name">Khushboo</span>
+          <span class="divider">/</span>
+          <span class="user-roll">7018/24</span>
+        </div>
+
+        <button id="theme-btn" class="theme-toggle" title="Toggle Light/Dark Mode">
+          <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <div class="hero">
+      <h2>CORE JAVA PROGRAMMING</h2>
+      <p>Submitted to Mr. Chetan Gupta</p>
+    </div>
+
+    <div class="topics-wrapper" id="topics-wrapper"></div>
+  </main>
+
+<script>
+// Each question is stored as: [number, question text, answer code, file name, output]
+const topics = [
+  {
+  name: "Single Dimension Arrays",
+  questions: [
+    [1, "Program to copy all elements of one array into another array",
+`// program to copy all elements of one array into another array
+class copyarray {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5}, b = new int[a.length];
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) b[i] = a[i];
+System.out.println(java.util.Arrays.toString(b));
+}
+}`,
+"copyarray.java", "[1, 2, 3, 4, 5]"],
+    [2, "Program to find the frequency of each element in the array",
+`// program to find the frequency of each element in the array
+class elementfrequency {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 2, 3, 1, 2};
+boolean[] v = new boolean[a.length];
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) {
+if (v[i]) continue;
+int f = 1;
+// go through a starting from index i + 1
+for (int j = i + 1; j < a.length; j++) if (a[i] == a[j]) {
+f++;
+v[j] = true;
+}
+System.out.println(a[i]+" -> "+f);
+}
+}
+}`,
+"elementfrequency.java", "1 -> 2\n2 -> 3\n3 -> 1"],
+    [3, "Program to left rotate the elements of an array",
+`// program to left rotate the elements of an array
+class leftrotate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+int n = 2;
+// loop k from 0 to n - 1
+for (int k = 0; k < n; k++) {
+int first = a[0];
+// loop i from 0 while i < a.length - 1
+for (int i = 0; i < a.length - 1; i++) a[i] = a[i + 1];
+a[a.length - 1] = first;
+}
+System.out.println(java.util.Arrays.toString(a));  // [3, 4, 5, 1, 2]
+}
+}`,
+"leftrotate.java", "[3, 4, 5, 1, 2]"],
+    [4, "Program to print the duplicate elements of an array",
+`// program to print the duplicate elements of an array
+class duplicateelements {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 2, 4, 1};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++)
+// go through a starting from index i + 1
+for (int j = i + 1; j < a.length; j++)
+if (a[i] == a[j]) {
+System.out.println(a[j]);
+break;
+}    // 2, 1
+}
+}`,
+"duplicateelements.java", "1\n2"],
+    [5, "Program to print the elements of an array",
+`// program to print the elements of an array
+class printarray {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+// take each x from a one by one
+for (int x : a) System.out.print(x+" ");
+}
+}`,
+"printarray.java", "1 2 3 4 5 "],
+    [6, "Program to print the elements of an array in reverse order",
+`// program to print the elements of an array in reverse order
+class reversearray {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+// count i down from a.length - 1 to 0
+for (int i = a.length - 1; i >= 0; i--) System.out.print(a[i]+" ");  // 5 4 3 2 1
+}
+}`,
+"reversearray.java", "5 4 3 2 1 "],
+    [7, "Program to print the elements of an array present on even position",
+`// program to print the elements of an array present on even position
+class evenposition {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {10, 20, 30, 40, 50};
+// go through a starting from index 1
+for (int i = 1; i < a.length; i += 2) System.out.print(a[i]+" ");  // 20 40 (positions 2,4)
+}
+}`,
+"evenposition.java", "20 40 "],
+    [8, "Program to print the elements of an array present on odd position",
+`// program to print the elements of an array present on odd position
+class oddposition {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {10, 20, 30, 40, 50};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i += 2) System.out.print(a[i]+" ");  // 10 30 50 (positions 1,3,5)
+}
+}`,
+"oddposition.java", "10 30 50 "],
+    [9, "Program to print the largest element in an array",
+`// program to print the largest element in an array
+class largestelement {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {25, 11, 7, 75, 56};
+int max = a[0];
+// take each x from a one by one
+for (int x : a) if (x > max) max = x;
+System.out.println(max);  // 75
+}
+}`,
+"largestelement.java", "75"],
+    [10, "Program to print the smallest element in an array",
+`// program to print the smallest element in an array
+class smallestelement {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {25, 11, 7, 75, 56};
+int min = a[0];
+// take each x from a one by one
+for (int x : a) if (x < min) min = x;
+System.out.println(min);  // 7
+}
+}`,
+"smallestelement.java", "7"],
+    [11, "Program to print the number of elements present in an array",
+`// program to print the number of elements present in an array
+class arraylength {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+System.out.println("Number of elements = "+a.length);  // 5
+}
+}`,
+"arraylength.java", "Number of elements = 5"],
+    [12, "Program to print the sum of all the items of the array",
+`// program to print the sum of all the items of the array
+class arraysum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+int sum = 0;
+// take each x from a one by one
+for (int x : a) sum += x;
+System.out.println(sum);  // 15
+}
+}`,
+"arraysum.java", "15"],
+    [13, "Program to right rotate the elements of an array",
+`// program to right rotate the elements of an array
+class rightrotate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+int n = 2;
+// loop k from 0 to n - 1
+for (int k = 0; k < n; k++) {
+int last = a[a.length - 1];
+// count i down from a.length - 1 to just above 0
+for (int i = a.length - 1; i > 0; i--) a[i] = a[i - 1];
+a[0] = last;
+}
+System.out.println(java.util.Arrays.toString(a));  // [4, 5, 1, 2, 3]
+}
+}`,
+"rightrotate.java", "[4, 5, 1, 2, 3]"],
+    [14, "Program to sort the elements of an array in ascending order",
+`// program to sort the elements of an array in ascending order
+class sortascending {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {5, 2, 8, 1, 9};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++)
+// go through a starting from index i + 1
+for (int j = i + 1; j < a.length; j++)
+if (a[i] > a[j]) {
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+System.out.println(java.util.Arrays.toString(a));  // [1, 2, 5, 8, 9]
+}
+}`,
+"sortascending.java", "[1, 2, 5, 8, 9]"],
+    [15, "Program to sort the elements of an array in descending order",
+`// program to sort the elements of an array in descending order
+class sortdescending {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {5, 2, 8, 1, 9};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++)
+// go through a starting from index i + 1
+for (int j = i + 1; j < a.length; j++)
+if (a[i] < a[j]) {
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+System.out.println(java.util.Arrays.toString(a));  // [9, 8, 5, 2, 1]
+}
+}`,
+"sortdescending.java", "[9, 8, 5, 2, 1]"],
+    [16, "Program to Find 3rd Largest Number in an array",
+`// program to find 3rd largest number in an array
+class thirdlargest {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {10, 50, 30, 40, 20};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++)
+// go through a starting from index i + 1
+for (int j = i + 1; j < a.length; j++)
+if (a[i] < a[j]) {
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+System.out.println("3rd largest = "+a[2]);  // 30
+}
+}`,
+"thirdlargest.java", "3rd largest = 30"],
+    [17, "Program to Find 2nd Largest Number in an array",
+`// program to find 2nd largest number in an array
+class secondlargest {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {12, 35, 1, 10, 34, 1};
+int l = Integer.MIN_VALUE, s = Integer.MIN_VALUE;
+// take each x from a one by one
+for (int x : a) {
+if (x > l) {
+s = l;
+l = x;
+}
+else if (x > s && x != l) s = x;
+}
+System.out.println("2nd largest = "+s);  // 34
+}
+}`,
+"secondlargest.java", "2nd largest = 34"],
+    [18, "Program to Find Largest Number in an array",
+`// program to find largest number in an array
+class largestnumber {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {3, 17, 9, 42, 8};
+int max = Integer.MIN_VALUE;
+// take each x from a one by one
+for (int x : a) if (x > max) max = x;
+System.out.println("Largest = "+max);  // 42
+}
+}`,
+"largestnumber.java", "Largest = 42"],
+    [19, "Program to Find 2nd Smallest Number in an array",
+`// program to find 2nd smallest number in an array
+class secondsmallest {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {12, 35, 1, 10, 34};
+int s = Integer.MAX_VALUE, s2 = Integer.MAX_VALUE;
+// take each x from a one by one
+for (int x : a) {
+if (x < s) {
+s2 = s;
+s = x;
+}
+else if (x < s2 && x != s) s2 = x;
+}
+System.out.println("2nd smallest = "+s2);  // 10
+}
+}`,
+"secondsmallest.java", "2nd smallest = 10"],
+    [20, "Program to Find Smallest Number in an array",
+`// program to find smallest number in an array
+class smallestnumber {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {3, 17, 9, 42, 8};
+int min = Integer.MAX_VALUE;
+// take each x from a one by one
+for (int x : a) if (x < min) min = x;
+System.out.println("Smallest = "+min);  // 3
+}
+}`,
+"smallestnumber.java", "Smallest = 3"],
+    [21, "Program to Remove Duplicate Element in an array",
+`// program to remove duplicate element in an array
+class removeduplicates {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 2, 3, 4, 4, 5};
+int[] r = new int[a.length];
+int n = 0;
+// take each x from a one by one
+for (int x : a) {
+boolean dup = false;
+// loop i from 0 to n - 1
+for (int i = 0; i < n; i++) if (r[i] == x) {
+dup = true;
+break;
+}
+if (!dup) r[n++] = x;
+}
+System.out.println(java.util.Arrays.toString(java.util.Arrays.copyOf(r, n)));  // [1, 2, 3, 4, 5]
+}
+}`,
+"removeduplicates.java", "[1, 2, 3, 4, 5]"],
+    [22, "Program to Print Odd and Even Numbers from an array",
+`// program to print odd and even numbers from an array
+class oddeven {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5, 6};
+System.out.print("Even: ");
+// take each x from a one by one
+for (int x : a) if (x % 2 == 0) System.out.print(x+" ");
+System.out.print(" Odd: ");
+for (int x : a) if (x % 2 != 0) System.out.print(x+" ");
+}
+}`,
+"oddeven.java", "Even: 2 4 6  Odd: 1 3 5 "],
+    [23, "How to Sort an Array in Java",
+`import java.util.*;
+// program to how to sort an array in java
+class sortarray {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {5, 2, 8, 1, 9};
+Arrays.sort(a);  // ascending
+System.out.println(Arrays.toString(a));  // [1, 2, 5, 8, 9]
+Integer[] b = {5, 2, 8, 1, 9};
+Arrays.sort(b, Collections.reverseOrder());  // descending
+System.out.println(Arrays.toString(b));  // [9, 8, 5, 2, 1]
+}
+}`,
+"sortarray.java", "[1, 2, 5, 8, 9]\n[9, 8, 5, 2, 1]"]
+  ]
+  },
+  {
+  name: "Functions",
+  questions: [
+    [1, "Write a Java method to find the smallest number among three numbers.",
+`// program to find the smallest number among three numbers
+class smallestofthree {
+// method to find the smallest number among three numbers
+static int smallest(int a, int b, int c) {
+return Math.min(a, Math.min(b, c));
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(smallest(25, 37, 29));
+}
+}`,
+"smallestofthree.java", "25"],
+    [2, "Write a Java method to compute the average of three numbers.",
+`// program to compute the average of three numbers
+class averagethree {
+// method to compute the average of three numbers
+static double avg(double a, double b, double c) {
+return (a + b + c) / 3;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(avg(10, 20, 30));
+}
+}`,
+"averagethree.java", "20.0"],
+    [3, "Write a Java method to display the middle character of a string (one middle character for odd length, two for even length)",
+`// program to display the middle character of a string
+class middlechar {
+// method to display the middle character of a string
+static String middle(String s) {
+int n = s.length();
+return n % 2 == 1 ? s.substring(n / 2, n / 2 + 1) : s.substring(n / 2 - 1, n / 2 + 1);
+}
+// note: the question's note is reversed; this is the standard rule.
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(middle("Java"));
+}
+}`,
+"middlechar.java", "av"],
+    [4, "Write a Java method to count all the words in a string.",
+`// program to count all the words in a string
+class countwords {
+// method to count all the words in a string
+static int words(String s) {
+s = s.trim();
+return s.isEmpty()?0:s.split("\\s+").length;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(words("Java is fun"));
+}
+}`,
+"countwords.java", "3"],
+    [5, "Write a Java method to compute the future investment value at a given interest rate for a specified number of years",
+`// program to compute the future investment value at a given interest rate for a specified number of years
+class futureinvestment {
+// method to compute the future investment value at a given interest rate for a specified number of years
+static double futureValue(double p, double ratePercent, int years) {
+return p * Math.pow(1 + ratePercent / 100, years);
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(futureValue(1000, 5, 10));
+}
+}`,
+"futureinvestment.java", "1628.894626777442"],
+    [6, "Write a Java method to print characters between two characters (i.e. A to P)",
+`// program to print characters between two characters
+class charrange {
+// method to print characters between two characters
+static void between(char a, char b) {
+// loop c from a to b
+for (char c = a; c <= b; c++) System.out.print(c+" ");
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+between('A', 'P');
+}
+}`,
+"charrange.java", "A B C D E F G H I J K L M N O P "],
+    [7, "Write a Java method to check whether a string is a valid password",
+`// program to check whether a string is a valid password
+class validpassword {
+// method to check whether a string is a valid password
+static boolean validPassword(String p) {
+if (p.length() < 8) return false;
+int digits = 0;
+// take each c from p.toCharArray( one by one
+for (char c : p.toCharArray()) {
+if (Character.isDigit(c)) digits++;
+else if (!Character.isLetter(c)) return false;
+}
+return digits >= 2;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(validPassword("Java2026pw"));
+System.out.println(validPassword("abc"));
+}
+}`,
+"validpassword.java", "true\nfalse"],
+    [8, "Write a Java method to display the current date and time",
+`// program to display the current date and time
+class currentdatetime {
+// method to display the current date and time
+static void now() {
+java.time.LocalDateTime d = java.time.LocalDateTime.now();
+System.out.println(d.format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+now();
+}
+}`,
+"currentdatetime.java", "11-10-2026 09:00:20"],
+    [10, "Write a Java method to count the number of digits in an integer with the value 2",
+`// program to count the number of digits in an integer with the value 2
+class countintdigits {
+// method to count the number of digits in an integer with the value 2
+static int countTwos(int n) {
+int c = 0;
+// keep going while n is greater than 0
+while (n > 0) {
+if (n % 10 == 2) c++;
+n /= 10;
+}
+return c;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(countTwos(2212));
+}
+}`,
+"countintdigits.java", "3"],
+    [11, "Write a Java method that accepts three integers and checks whether they are consecutive or not",
+`// program to accepts three integers and checks whether they are consecutive or not
+class consecutivecheck {
+// method to accepts three integers and checks whether they are consecutive or not
+static boolean consecutive(int a, int b, int c) {
+int max = Math.max(a, Math.max(b, c)), min = Math.min(a, Math.min(b, c));
+return (max - min == 2) && a != b && b != c && a != c;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(consecutive(5, 6, 7));
+}
+}`,
+"consecutivecheck.java", "true"],
+    [12, "Write a Java method that accepts three integers and returns true if one is the middle point between the other two",
+`// program to accepts three integers and returns true if one is the middle point between the other two
+class middlepoint {
+// method to accepts three integers and returns true if one is the middle point between the other two
+static boolean middlePoint(int a, int b, int c) {
+return (a - b == b - c) || (b - a == a - c) || (a - c == c - b);
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(middlePoint(5, 10, 15));
+}
+}`,
+"middlepoint.java", "true"],
+    [13, "Write a Java method that checks whether all the characters in a given string are vowels",
+`// program to checks whether all the characters in a given string are vowels
+class allvowels {
+// method to checks whether all the characters in a given string are vowels
+static boolean allVowels(String s) {
+if (s.isEmpty()) return false;
+// take each c from s.toLowerCase( one by one
+for (char c : s.toLowerCase().toCharArray())
+if ("aeiou".indexOf(c) < 0) return false;
+return true;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(allVowels("aeiou"));
+}
+}`,
+"allvowels.java", "true"]
+  ]
+  },
+  {
+  name: "Strings",
+  questions: [
+    [1, "Program to Check if a String contains only digits?",
+`// program to check if a string contains only digits
+class onlydigits {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "12345";
+System.out.println(s.matches("[0-9]+"));  // true
+}
+}`,
+"onlydigits.java", "true"],
+    [2, "Program to perform Deep Copy for String?",
+`// program to perform deep copy for string
+class deepcopy {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String a = "Java";
+String b = new String(a);  // new object (deep copy)
+System.out.println(a == b);  // false (different objects)
+System.out.println(a.equals(b));  // true (same content)
+}
+}`,
+"deepcopy.java", "false\ntrue"],
+    [3, "Program to prove String is immutable programmatically?",
+`// program to prove string is immutable programmatically
+class immutablestring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello";
+String t = s;
+s.concat(" World");  // result is discarded
+System.out.println(s);  // hello (unchanged)
+s = s.concat(" World");  // a new object is created
+System.out.println(s+" | "+t);  // hello world | hello
+}
+}`,
+"immutablestring.java", "Hello\nHello World | Hello"],
+    [4, "Program to remove all occurrences of a given character from input String?",
+`// program to remove all occurrences of a given character from input string
+class removechar {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "programming";
+char ch = 'm';
+String r = s.replace(String.valueOf(ch), "");
+System.out.println(r);  // prograing
+}
+}`,
+"removechar.java", "prograing"],
+    [5, "Program to append the string using StringBuffer class",
+`// program to append the string using stringbuffer class
+class bufferappend {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");
+sb.append(2026);
+System.out.println(sb);  // hello world2026
+}
+}`,
+"bufferappend.java", "Hello World2026"],
+    [6, "Program to insert the string using StringBuffer class",
+`// program to insert the string using stringbuffer class
+class bufferinsert {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+StringBuffer sb = new StringBuffer("Hello World");
+sb.insert(5, " Java");
+System.out.println(sb);  // hello java world
+}
+}`,
+"bufferinsert.java", "Hello Java World"],
+    [7, "Program to Add Characters to a String",
+`// program to add characters to a string
+class addchars {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Jav";
+s = s+'a';  // using +
+s += '!';
+System.out.println(s);  // java!
+}
+}`,
+"addchars.java", "Java!"],
+    [8, "Program to Add Characters to a String (at a given position)",
+`// program to add characters to a string
+class addcharat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Jva";
+int pos = 1;
+char ch = 'a';
+String r = s.substring(0, pos) + ch + s.substring(pos);
+System.out.println(r);  // java
+}
+}`,
+"addcharat.java", "Java"],
+    [10, "Program to check whether a string is a Palindrome",
+`// program to check whether a string is a palindrome
+class palindromestring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "madam", r = "";
+// count i down from s.length() - 1 to 0
+for (int i = s.length() - 1; i >= 0; i--) r += s.charAt(i);
+System.out.println(s.equals(r)?"Palindrome":"Not a palindrome");
+}
+}`,
+"palindromestring.java", "Palindrome"],
+    [11, "Program to Convert Enum to String",
+`// enum day: a fixed set of constant values
+enum Day {
+MON, TUE, WED
+}
+// program to convert enum to string
+class enumtostring {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+Day d = Day.TUE;
+String s = d.name();  // or d.tostring()
+System.out.println(s);  // tue
+}
+}`,
+"enumtostring.java", "TUE"],
+    [12, "Program to Convert String to String Array",
+`// program to convert string to string array
+class stringtoarray {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java is fun";
+String[] words = s.split(" ");
+System.out.println(java.util.Arrays.toString(words));  // [java, is, fun]
+String[] chars = s.split("");  // one element per character
+}
+}`,
+"stringtoarray.java", "[Java, is, fun]"],
+    [13, "Program to count number of words in a String?",
+`// program to count number of words in a string
+class wordcount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "  Java is a programming language ";
+int count = s.trim().isEmpty()?0:s.trim().split("\\\\s+").length;
+System.out.println(count);  // 5
+}
+}`,
+"wordcount.java", "5"],
+    [14, "Program to count the total number of characters in a string",
+`// program to count the total number of characters in a string
+class charcount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello World";
+int count = 0;
+// visit each character of s one by one
+for (int i = 0; i < s.length(); i++) if (s.charAt(i) != ' ') count++;
+System.out.println(count);  // 10 (without spaces); s.length() = 11 with spaces
+}
+}`,
+"charcount.java", "10"],
+    [15, "Program to count the total number of punctuation characters exists in a String",
+`// program to count the total number of punctuation characters exists in a string
+class punctuationcount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello, World! How are you?";
+int c = 0;
+// take each ch from s.toCharArray( one by one
+for (char ch : s.toCharArray())
+if ("!\\"#$%&'()*+,-./:;<=>?@[]^_{|}~".indexOf(ch) >= 0) c++;
+System.out.println(c);  // 3
+}
+}`,
+"punctuationcount.java", "3"],
+    [16, "Program to count the total number of vowels and consonants in a string",
+`// program to count the total number of vowels and consonants in a string
+class vowelcount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello World";
+int v = 0, c = 0;
+// take each ch from s.toLowerCase( one by one
+for (char ch : s.toLowerCase().toCharArray()) {
+if ("aeiou".indexOf(ch) >= 0) v++;
+else if (ch >= 'a' && ch <= 'z') c++;
+}
+System.out.println("Vowels="+v+", Consonants="+c);  // 3, 7
+}
+}`,
+"vowelcount.java", "Vowels=3, Consonants=7"],
+    [17, "Program to determine whether a given string is palindrome",
+`// program to determine whether a given string is palindrome
+class palindromecheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Madam";
+String t = s.toLowerCase();
+boolean p = true;
+// count i down from 0 to just above j
+for (int i = 0, j = t.length() - 1; i < j; i++, j--)
+if (t.charAt(i) != t.charAt(j)) {
+p = false;
+break;
+}
+System.out.println(p?"Palindrome":"Not palindrome");
+}
+}`,
+"palindromecheck.java", "Palindrome"],
+    [23, "Program to find Reverse of the string",
+`// program to find reverse of the string
+class reversestring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello";
+String r = new StringBuilder(s).reverse().toString();
+System.out.println(r);  // olleh
+}
+}`,
+"reversestring.java", "olleH"],
+    [24, "Program to find the duplicate characters in a string",
+`// program to find the duplicate characters in a string
+class duplicatechars {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "programming";
+int[] f = new int[256];
+// take each c from s.toCharArray( one by one
+for (char c : s.toCharArray()) f[c]++;
+// loop i from 0 to 255
+for (int i = 0; i < 256; i++) if (f[i] > 1) System.out.println((char) i+" -> "+f[i]);  // g, m, r
+}
+}`,
+"duplicatechars.java", "g -> 2\nm -> 2\nr -> 2"],
+    [26, "Program to find the frequency of characters",
+`// program to find the frequency of characters
+class charfrequency {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "hello world";
+java.util.Map<Character, Integer> m = new java.util.LinkedHashMap<>();
+// take each c from s.toCharArray( one by one
+for (char c : s.toCharArray()) if (c != ' ') m.merge(c, 1, Integer::sum);
+System.out.println(m);  // {h=1, e=1, l=3, o=2, w=1, r=1, d=1}
+}
+}`,
+"charfrequency.java", "{h=1, e=1, l=3, o=2, w=1, r=1, d=1}"],
+    [31, "Program to Get a Character From the Given String",
+`// program to get a character from the given string
+class getchar {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java";
+System.out.println(s.charAt(2));  // v
+}
+}`,
+"getchar.java", "v"],
+    [32, "Program to Insert a string into another string",
+`// program to insert a string into another string
+class insertstring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello World";
+String r = new StringBuilder(s).insert(6, "Java ").toString();
+System.out.println(r);  // hello java world
+}
+}`,
+"insertstring.java", "Hello Java World"],
+    [33, "Program to Iterate Over Characters in String",
+`// program to iterate over characters in string
+class iteratechars {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java";
+// visit each character of s one by one
+for (int i = 0; i < s.length(); i++) System.out.println(s.charAt(i));
+// take each c from s.toCharArray( one by one
+for (char c : s.toCharArray()) System.out.print(c+" ");
+}
+}`,
+"iteratechars.java", "J\na\nv\na\nJ a v a "],
+    [34, "Program to Print a New Line in String",
+`// program to print a new line in string
+class newlinestring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+System.out.println("Hello\\nWorld");
+System.out.println("Hello"+System.lineSeparator()+"World");
+System.out.printf("Hello%nWorld%n");
+}
+}`,
+"newlinestring.java", "Hello\nWorld\nHello\nWorld\nHello\nWorld"],
+    [35, "Program to Print even length words",
+`// program to print even length words
+class evenlengthwords {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "This is a Java program";
+// take each w from s.split(" " one by one
+for (String w : s.split(" ")) if (w.length() % 2 == 0) System.out.println(w);  // this, is, java
+}
+}`,
+"evenlengthwords.java", "This\nis\nJava"],
+    [37, "Program to remove all the white spaces from a string",
+`// program to remove all the white spaces from a string
+class removespaces {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = " J a v a  P r o g ";
+System.out.println(s.replaceAll("\\\\s", ""));  // javaprog
+}
+}`,
+"removespaces.java", "JavaProg"],
+    [38, "Program to replace lower-case characters with upper-case and vice-versa",
+`// program to replace lower-case characters with upper-case and vice-versa
+class swapcase {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello World";
+StringBuilder sb = new StringBuilder();
+// take each c from s.toCharArray( one by one
+for (char c : s.toCharArray())
+sb.append(Character.isUpperCase(c)?Character.toLowerCase(c):Character.toUpperCase(c));
+System.out.println(sb);  // hello world
+}
+}`,
+"swapcase.java", "hELLO wORLD"],
+    [39, "Program to replace the spaces of a string with a specific character",
+`// program to replace the spaces of a string with a specific character
+class replacespaces {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java is fun";
+char ch = '-';
+System.out.println(s.replace(' ', ch));  // java-is-fun
+}
+}`,
+"replacespaces.java", "Java-is-fun"],
+    [40, "Program to separate the Individual Characters from a String",
+`// program to separate the individual characters from a string
+class splitchars {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java";
+// take each c from s.toCharArray( one by one
+for (char c : s.toCharArray()) System.out.print(c+" ");  // j a v a
+}
+}`,
+"splitchars.java", "J a v a "],
+    [41, "Program to Splitting into a number of sub-strings",
+`// program to splitting into a number of sub-strings
+class splitstring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "red,green,blue";
+String[] parts = s.split(",");
+System.out.println(parts.length);  // 3
+// take each p from parts one by one
+for (String p : parts) System.out.println(p);
+}
+}`,
+"splitstring.java", "3\nred\ngreen\nblue"],
+    [44, "Read two String user input and check if first contains second?",
+`import java.util.Scanner;
+// program to read two string user input and check if first contains second
+class containscheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+String a = sc.nextLine(), b = sc.nextLine();
+System.out.println(a.contains(b)?"First contains second":"Does not contain");
+}
+}`,
+"containscheck.java", "5\n3\nDoes not contain"],
+    [45, "Reserve String without reverse() function",
+`// program to reserve string without reverse
+class reversemanual {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java", r = "";
+// count i down from s.length() - 1 to 0
+for (int i = s.length() - 1; i >= 0; i--) r += s.charAt(i);
+System.out.println(r);  // avaj
+}
+}`,
+"reversemanual.java", "avaJ"],
+    [46, "Reverse String Word by Word",
+`// program to reverse string word by word
+class reversewords {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "I love Java";
+String[] w = s.split(" ");
+StringBuilder sb = new StringBuilder();
+// count i down from w.length - 1 to 0
+for (int i = w.length - 1; i >= 0; i--) sb.append(w[i]).append(' ');
+System.out.println(sb.toString().trim());  // java love i
+}
+}`,
+"reversewords.java", "Java love I"],
+    [49, "Create an object StringBuffer class to reverse the string.",
+`// program to create an object stringbuffer class to reverse the string
+class bufferreverse {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+StringBuffer sb = new StringBuffer("Hello");
+System.out.println(sb.reverse());  // olleh
+}
+}`,
+"bufferreverse.java", "olleH"],
+    [50, "Create an object StringBuffer class to show functionality of insert, append, delete and replace functions.",
+`// program to create an object stringbuffer class to show functionality of insert, append, delete and
+class bufferdemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");
+System.out.println(sb);  // hello world
+sb.insert(5, ",");
+System.out.println(sb);  // hello, world
+sb.replace(7, 12, "Java");
+System.out.println(sb);  // hello, java
+sb.delete(5, 6);
+System.out.println(sb);  // hello java
+}
+}`,
+"bufferdemo.java", "Hello World\nHello, World\nHello, Java\nHello Java"]
+  ]
+  },
+  {
+  name: "Multi-Dimension Arrays",
+  questions: [
+    [1, "Enter the Matrix of rows and columns entered by the user and print in matrix format",
+`import java.util.Scanner;
+// program to enter the matrix of rows and columns entered by the user and print in matrix format
+class matrixinput {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int r = sc.nextInt(), c = sc.nextInt();
+int[][] a = new int[r][c];
+for (int i = 0; i < r; i++) for (int j = 0; j < c; j++) a[i][j] = sc.nextInt();
+// loop i from 0 to r - 1
+for (int i = 0; i < r; i++) {
+// loop j from 0 to c - 1
+for (int j = 0; j < c; j++) System.out.print(a[i][j]+" ");
+System.out.println();
+}
+}
+}`,
+"matrixinput.java", "2 3\n1 2 3\n4 5 6\n1 2 3 \n4 5 6 "],
+    [2, "Program to Add Two Matrices",
+`// program to add two matrices
+class addmatrix {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2}, {3, 4}}, b = {{5, 6}, {7, 8}}, c = new int[2][2];
+// loop i from 0 to 1
+for (int i = 0; i < 2; i++)
+// loop j from 0 to 1
+for (int j = 0; j < 2; j++) c[i][j] = a[i][j] + b[i][j];
+System.out.println(java.util.Arrays.deepToString(c));  // [[6, 8], [10, 12]]
+}
+}`,
+"addmatrix.java", "[[6, 8], [10, 12]]"],
+    [4, "Program to subtract the two matrices",
+`// program to subtract the two matrices
+class submatrix {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{5, 6}, {7, 8}}, b = {{1, 2}, {3, 4}}, c = new int[2][2];
+// loop i from 0 to 1
+for (int i = 0; i < 2; i++) for (int j = 0; j < 2; j++) c[i][j] = a[i][j] - b[i][j];
+System.out.println(java.util.Arrays.deepToString(c));  // [[4, 4], [4, 4]]
+}
+}`,
+"submatrix.java", "[[4, 4], [4, 4]]"],
+    [5, "Program to determine whether two matrices are equal",
+`// program to determine whether two matrices are equal
+class equalmatrix {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2}, {3, 4}}, b = {{1, 2}, {3, 4}};
+boolean eq = true;
+// loop i from 0 to 1
+for (int i = 0; i < 2; i++) for (int j = 0; j < 2; j++) if (a[i][j] != b[i][j]) eq = false;
+System.out.println(eq?"Equal":"Not equal");
+}
+}`,
+"equalmatrix.java", "Equal"],
+    [8, "Program to find the frequency of odd & even numbers in the given matrix",
+`// program to find the frequency of odd & even numbers in the given matrix
+class matrixoddeven {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+int odd = 0, even = 0;
+// take each row from a one by one
+for (int[] row : a) for (int x : row) if (x % 2 == 0) even++;
+else odd++;
+System.out.println("Even="+even+" Odd="+odd);  // even=4 odd=5
+}
+}`,
+"matrixoddeven.java", "Even=4 Odd=5"],
+    [9, "Program to find the sum of each row and each column of a matrix",
+`// program to find the sum of each row and each column of a matrix
+class rowcolsum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+// loop i from 0 to 2
+for (int i = 0; i < 3; i++) {
+int rs = 0, cs = 0;
+// loop j from 0 to 2
+for (int j = 0; j < 3; j++) {
+rs += a[i][j];
+cs += a[j][i];
+}
+System.out.println("Row "+(i + 1)+" = "+rs+", Column "+(i + 1)+" = "+cs);
+}
+}
+}`,
+"rowcolsum.java", "Row 1 = 6, Column 1 = 12\nRow 2 = 15, Column 2 = 15\nRow 3 = 24, Column 3 = 18"],
+    [10, "Program to find the transpose of a given matrix",
+`// program to find the transpose of a given matrix
+class findtranspose {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2, 3}, {4, 5, 6}}, t = new int[3][2];
+// loop i from 0 to 1
+for (int i = 0; i < 2; i++)
+// loop j from 0 to 2
+for (int j = 0; j < 3; j++) t[j][i] = a[i][j];
+System.out.println(java.util.Arrays.deepToString(t));  // [[1, 4], [2, 5], [3, 6]]
+}
+}`,
+"findtranspose.java", "[[1, 4], [2, 5], [3, 6]]"],
+    [11, "Program to determine whether a given matrix is an identity matrix",
+`// program to determine whether a given matrix is an identity matrix
+class identitymatrix {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+boolean id = true;
+// loop i from 0 to 2
+for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++)
+if ((i == j && a[i][j] != 1) || (i != j && a[i][j] != 0)) id = false;
+System.out.println(id?"Identity matrix":"Not an identity matrix");
+}
+}`,
+"identitymatrix.java", "Identity matrix"],
+    [12, "Program to Transpose matrix",
+`import java.util.Scanner;
+// program to transpose matrix
+class matrixtranspose {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int r = sc.nextInt(), c = sc.nextInt();
+int[][] a = new int[r][c], t = new int[c][r];
+// loop i from 0 to r - 1
+for (int i = 0; i < r; i++) for (int j = 0; j < c; j++) {
+a[i][j] = sc.nextInt();
+t[j][i] = a[i][j];
+}
+// take each row from t one by one
+for (int[] row : t) {
+// take each x from row one by one
+for (int x : row) System.out.print(x+" ");
+System.out.println();
+}
+}
+}`,
+"matrixtranspose.java", "2 3\n1 2 3\n4 5 6\n1 4 \n2 5 \n3 6 "]
+  ]
+  },
+  {
+  name: "Basic Programming Constructs",
+  questions: [
+    [1, "Write a Java program to print 'Hello World!' on screen",
+`// program to print 'hello world!' on screen
+class helloworld {
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println("Hello World!");
+}
+}`,
+"helloworld.java", "Hello World!"],
+    [2, "Write a Java program to print the sum of two numbers",
+`import java.util.Scanner;
+// program to print the sum of two numbers
+class sumtwo {
+
+// execution begins in main()
+
+public static void main(String[] args) {
+Scanner sc = new Scanner(System.in);
+int a = sc.nextInt(), b = sc.nextInt();
+System.out.println("Sum = "+(a + b));
+}
+}`,
+"sumtwo.java", "5\n3\nSum = 8"],
+    [3, "Write a Java program that takes two numbers and display the product of two numbers",
+`import java.util.Scanner;
+// program to takes two numbers and display the product of two numbers
+class producttwo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);  // import java.util.scanner;
+int a = sc.nextInt(), b = sc.nextInt();
+System.out.println("Product = "+(a * b));
+}
+}`,
+"producttwo.java", "5\n3\nProduct = 15"],
+    [4, "Write a Java program to print the sum, multiply, subtract, divide and remainder of two numbers",
+`// program to print the sum, multiply, subtract, divide and remainder of two numbers
+class arithmetic {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 20, b = 6;
+System.out.println("Sum="+(a + b)+" Mul="+(a * b)+" Sub="+(a - b)+" Div="+(a / b)+" Rem="+(a % b));
+}
+}`,
+"arithmetic.java", "Sum=26 Mul=120 Sub=14 Div=3 Rem=2"],
+    [5, "Write a Java program that takes five numbers as input to calculate and print the average of the numbers",
+`import java.util.Scanner;
+// program to takes five numbers as input to calculate and print the average of the numbers
+class averagefive {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+double sum = 0;
+for (int i = 0; i < 5; i++) sum += sc.nextDouble();
+System.out.println("Average = "+sum / 5);
+}
+}`,
+"averagefive.java", "5\n3\n7\n2\n9\nAverage = 5.2"],
+    [6, "Write a Java program to swap two variables",
+`// program to swap two variables
+class swapvars {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 10, b = 20, t = a;
+a = b;
+b = t;
+System.out.println(a+" "+b);  // 20 10
+}
+}`,
+"swapvars.java", "20 10"],
+    [7, "Write a Java program to convert a decimal number to binary numbers",
+`// program to convert a decimal number to binary numbers
+class decimaltobinary {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 25;
+String b = "";
+// keep going while n is greater than 0
+while (n > 0) {
+b = (n % 2) + b;
+n /= 2;
+}
+System.out.println(b);  // 11001
+}
+}`,
+"decimaltobinary.java", "11001"],
+    [8, "Write a Java program to convert a binary number to decimal number",
+`// program to convert a binary number to decimal number
+class binarytodecimal {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int b = 1101, d = 0, p = 1;
+// keep going while b is greater than 0
+while (b > 0) {
+d += (b % 10) * p;
+p *= 2;
+b /= 10;
+}
+System.out.println(d);  // 13
+}
+}`,
+"binarytodecimal.java", "13"],
+    [9, "Write a Java program to check whether Java is installed on your computer or not",
+`// program to check whether java is installed on your computer or not
+class javacheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String v = System.getProperty("java.version");
+System.out.println(v != null ? "Java is installed, version "+v : "Java not found");
+}
+}`,
+"javacheck.java", "Java is installed, version 21.0.10"],
+    [10, "Write a Java program and compute the sum of the digits of an integer",
+`// program to compute the sum of the digits of an integer
+class digitsum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 1234, sum = 0;
+// keep going while n is greater than 0
+while (n > 0) {
+sum += n % 10;
+n /= 10;
+}
+System.out.println(sum);  // 10
+}
+}`,
+"digitsum.java", "10"],
+    [11, "Write a Java program to compare two numbers",
+`// program to compare two numbers
+class comparenumbers {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 10, b = 20;
+if (a > b) System.out.println(a+" is greater");
+else if (a < b) System.out.println(b+" is greater");
+else System.out.println("Both are equal");
+}
+}`,
+"comparenumbers.java", "20 is greater"],
+    [12, "Write a Java program to count the letters, spaces, numbers and other characters of an input string",
+`// program to count the letters, spaces, numbers and other characters of an input string
+class charcounter {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java 17 is #1!";
+int l = 0, sp = 0, d = 0, o = 0;
+// take each c from s.toCharArray( one by one
+for (char c : s.toCharArray()) {
+if (Character.isLetter(c)) l++;
+else if (c == ' ') sp++;
+else if (Character.isDigit(c)) d++;
+else o++;
+}
+System.out.println("Letters="+l+" Spaces="+sp+" Digits="+d+" Others="+o);
+}
+}`,
+"charcounter.java", "Letters=6 Spaces=3 Digits=3 Others=2"],
+    [13, "Write a Java program to print the ascii value of a given character",
+`// program to print the ascii value of a given character
+class asciivalue {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+char c = 'A';
+System.out.println((int) c);  // 65
+}
+}`,
+"asciivalue.java", "65"],
+    [14, "Write a Java program that accepts an integer (n) and computes the value of n+nn+nnn",
+`// program to accepts an integer
+class nnnsum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 5;
+int r = n + (n * 10 + n) + (n * 100 + n * 10 + n);
+System.out.println(r);  // 5+55+555 = 615
+}
+}`,
+"nnnsum.java", "615"],
+    [15, "Write a Java program to display the system time",
+`// program to display the system time
+class systemtime {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+System.out.println(java.time.LocalTime.now());
+}
+}`,
+"systemtime.java", "09:01:59.711211108"],
+    [16, "Write a Java program to print the odd numbers from 1 to 20",
+`// program to print the odd numbers from 1 to 20
+class oddto20 {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+// loop i from 1 to 20 in steps of 2
+for (int i = 1; i <= 20; i += 2) System.out.print(i+" ");
+}
+}`,
+"oddto20.java", "1 3 5 7 9 11 13 15 17 19 "],
+    [17, "Write a Java program to print the even numbers from 1 to 20",
+`// program to print the even numbers from 1 to 20
+class evento20 {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+// loop i from 2 to 20 in steps of 2
+for (int i = 2; i <= 20; i += 2) System.out.print(i+" ");
+}
+}`,
+"evento20.java", "2 4 6 8 10 12 14 16 18 20 "],
+    [18, "Write a Java program to convert a string to an integer",
+`// program to convert a string to an integer
+class stringtoint {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "1234";
+int n = Integer.parseInt(s);
+System.out.println(n + 1);  // 1235
+}
+}`,
+"stringtoint.java", "1235"],
+    [19, "Write a Java program to convert seconds to hour, minute and seconds",
+`// program to convert seconds to hour, minute and seconds
+class secondstohms {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int t = 7385;
+System.out.println(t / 3600+"h "+(t % 3600) / 60+"m "+t % 60+"s");  // 2h 3m 5s
+}
+}`,
+"secondstohms.java", "2h 3m 5s"],
+    [20, "Write a Java program to compute the sum of the first 100 prime numbers",
+`// program to compute the sum of the first 100 prime numbers
+class primesum100 {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int count = 0, n = 2, sum = 0;
+// keep going while count is less than 100
+while (count < 100) {
+boolean p = true;
+// repeat while i * i <= n
+for (int i = 2; i * i <= n; i++) if (n % i == 0) {
+p = false;
+break;
+}
+if (p) {
+sum += n;
+count++;
+}
+n++;
+}
+System.out.println(sum);  // 24133
+}
+}`,
+"primesum100.java", "24133"],
+    [21, "Write a Java program to swap the first and last elements of an array and create a new array",
+`// program to swap the first and last elements of an array and create a new array
+class swapends {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+int[] b = a.clone();
+int t = b[0];
+b[0] = b[b.length - 1];
+b[b.length - 1] = t;
+System.out.println(java.util.Arrays.toString(b));  // [5, 2, 3, 4, 1]
+}
+}`,
+"swapends.java", "[5, 2, 3, 4, 1]"],
+    [22, "Write a Java program to count the number of even and odd elements in a given array",
+`// program to count the number of even and odd elements in a given array
+class evenoddcount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5, 6, 7};
+int e = 0, o = 0;
+// take each x from a one by one
+for (int x : a) if (x % 2 == 0) e++;
+else o++;
+System.out.println("Even="+e+" Odd="+o);  // even=3 odd=4
+}
+}`,
+"evenoddcount.java", "Even=3 Odd=4"],
+    [23, "Write a Java program to compute the square root of an given integer",
+`// program to compute the square root of an given integer
+class squareroot {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 17;
+System.out.println(Math.sqrt(n));  // 4.123...
+int r = 0;
+while ((r + 1) * (r + 1) <= n) r++;
+System.out.println(r);  // integer square root = 4
+}
+}`,
+"squareroot.java", "4.123105625617661\n4"],
+    [24, "Write a Java program to check if a positive number is a palindrome or not",
+`// program to check if a positive number is a palindrome or not
+class numberpalindrome {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 121, t = n, r = 0;
+// keep going while t is greater than 0
+while (t > 0) {
+r = r * 10 + t % 10;
+t /= 10;
+}
+System.out.println(r == n?"Palindrome":"Not palindrome");
+}
+}`,
+"numberpalindrome.java", "Palindrome"],
+    [25, "Write a Java program to add two numbers without using any arithmetic operators",
+`// program to add two numbers without using any arithmetic operators
+class bitwiseadd {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 15, b = 25;
+// keep going while b is not equal to 0
+while (b != 0) {
+int carry = a&b;
+a = a^b;
+b = carry<<1;
+}
+System.out.println(a);  // 40
+}
+}`,
+"bitwiseadd.java", "40"],
+    [26, "Write a Java program to add all the digits of a given positive integer",
+`// program to add all the digits of a given positive integer
+class digitadd {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 9875;
+// keep going while n is greater than 9
+while (n > 9) {
+int s = 0;
+// keep going while n is greater than 0
+while (n > 0) {
+s += n % 10;
+n /= 10;
+}
+n = s;
+}
+System.out.println(n);  // 9875 -> 29 -> 11 -> 2
+}
+}`,
+"digitadd.java", "2"],
+    [27, "Java program to find area of circle",
+`// program to find area of circle
+class circlearea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double r = 5;
+System.out.println(Math.PI * r * r);
+}
+}`,
+"circlearea.java", "78.53981633974483"],
+    [28, "Java Program to find area of rectangle",
+`// program to find area of rectangle
+class rectanglearea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double l = 8, b = 5;
+System.out.println(l * b);  // 40.0
+}
+}`,
+"rectanglearea.java", "40.0"],
+    [29, "Java Program to find area of triangle",
+`// program to find area of triangle
+class trianglearea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double b = 6, h = 4;
+System.out.println(0.5 * b * h);  // 12.0
+}
+}`,
+"trianglearea.java", "12.0"],
+    [30, "Java Program to find area of equilateral triangle",
+`// program to find area of equilateral triangle
+class equilateralarea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double s = 6;
+System.out.println(Math.sqrt(3) / 4 * s * s);
+}
+}`,
+"equilateralarea.java", "15.588457268119896"],
+    [31, "Java Program to find area of rhombus",
+`// program to find area of rhombus
+class rhombusarea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double d1 = 8, d2 = 6;
+System.out.println(0.5 * d1 * d2);  // 24.0
+}
+}`,
+"rhombusarea.java", "24.0"],
+    [32, "Java Program to find area of parallelogram",
+`// program to find area of parallelogram
+class parallelogramarea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double b = 10, h = 4;
+System.out.println(b * h);  // 40.0
+}
+}`,
+"parallelogramarea.java", "40.0"],
+    [33, "Java Program to find area of Prism",
+`// program to find area of prism
+class prismarea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double l = 5, w = 4, h = 3;
+System.out.println(2 * (l * w + w * h + h * l));  // 94.0
+}
+}`,
+"prismarea.java", "94.0"],
+    [34, "Java Program to find volume of sphere",
+`// program to find volume of sphere
+class spherevolume {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double r = 3;
+System.out.println(4.0 / 3 * Math.PI * r * r * r);
+}
+}`,
+"spherevolume.java", "113.09733552923255"],
+    [35, "Java Program to find volume of cylinder",
+`// program to find volume of cylinder
+class cylindervolume {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double r = 3, h = 10;
+System.out.println(Math.PI * r * r * h);
+}
+}`,
+"cylindervolume.java", "282.7433388230814"],
+    [36, "Java Program to find volume of cuboid",
+`// program to find volume of cuboid
+class cuboidvolume {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double l = 5, w = 4, h = 3;
+System.out.println(l * w * h);  // 60.0
+}
+}`,
+"cuboidvolume.java", "60.0"],
+    [37, "Java Program to find volume of cone",
+`// program to find volume of cone
+class conevolume {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double r = 3, h = 9;
+System.out.println(Math.PI * r * r * h / 3);
+}
+}`,
+"conevolume.java", "84.82300164692441"],
+    [38, "Java program to find surface area of cuboid",
+`// program to find surface area of cuboid
+class cuboidsurface {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double l = 5, w = 4, h = 3;
+System.out.println(2 * (l * w + w * h + h * l));  // 94.0
+}
+}`,
+"cuboidsurface.java", "94.0"],
+    [39, "Java program to find surface area of cylinder",
+`// program to find surface area of cylinder
+class cylindersurface {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double r = 3, h = 10;
+System.out.println(2 * Math.PI * r * (r + h));
+}
+}`,
+"cylindersurface.java", "245.04422698000386"],
+    [40, "Java program to find surface area of cube",
+`// program to find surface area of cube
+class cubesurface {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double a = 4;
+System.out.println(6 * a * a);  // 96.0
+}
+}`,
+"cubesurface.java", "96.0"],
+    [41, "Java program to calculate average marks",
+`// program to calculate average marks
+class averagemarks {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] m = {78, 85, 90, 67, 88};
+int sum = 0;
+// take each x from m one by one
+for (int x : m) sum += x;
+System.out.println("Average = "+(double) sum / m.length);  // 81.6
+}
+}`,
+"averagemarks.java", "Average = 81.6"],
+    [42, "Java program to check vowel or consonant",
+`// program to check vowel or consonant
+class vowelcheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+char c = Character.toLowerCase('E');
+if (!Character.isLetter(c)) System.out.println("Not a letter");
+else System.out.println("aeiou".indexOf(c) >= 0?"Vowel":"Consonant");
+}
+}`,
+"vowelcheck.java", "Vowel"],
+    [43, "Java program to sum of N numbers",
+`// program to sum of n numbers
+class sumofn {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 10, sum = 0;
+// loop i from 1 to n
+for (int i = 1; i <= n; i++) sum += i;
+System.out.println(sum);  // 55  (formula: n*(n+1)/2)
+}
+}`,
+"sumofn.java", "55"],
+    [44, "Java program to find factorial of any number",
+`// program to find factorial of any number
+class factorial {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 5;
+long f = 1;
+// loop i from 2 to n
+for (int i = 2; i <= n; i++) f *= i;
+System.out.println(f);  // 120
+}
+}`,
+"factorial.java", "120"],
+    [45, "Java Program to calculate electricity bill",
+`// program to calculate electricity bill
+class electricitybill {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int units = 250;
+double bill;
+if (units <= 100) bill = units * 1.5;
+else if (units <= 200) bill = 100 * 1.5 + (units - 100) * 2.5;
+else bill = 100 * 1.5 + 100 * 2.5 + (units - 200) * 4;
+System.out.println("Bill = Rs. "+bill);  // 600.0
+}
+}`,
+"electricitybill.java", "Bill = Rs. 600.0"],
+    [46, "Java Program To Calculate CGPA Percentage",
+`// program to calculate cgpa percentage
+class cgpa {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double cgpa = 8.4;
+System.out.println("Percentage = "+cgpa * 9.5+"%");  // 79.8%
+}
+}`,
+"cgpa.java", "Percentage = 79.8%"],
+    [47, "Java Program to calculate compound interest",
+`// program to calculate compound interest
+class compoundinterest {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double p = 10000, r = 5, t = 3;
+double amount = p * Math.pow(1 + r / 100, t);
+System.out.println("CI = "+(amount - p));  // 1576.25
+}
+}`,
+"compoundinterest.java", "CI = 1576.2500000000018"],
+    [48, "Java Program To Calculate Batting Average",
+`// program to calculate batting average
+class battingaverage {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int runs = 3500, innings = 100, notOut = 10;
+System.out.println("Batting average = "+(double) runs / (innings - notOut));  // 38.88
+}
+}`,
+"battingaverage.java", "Batting average = 38.888888888888886"],
+    [49, "Java Pogram to Calculate Commission Percentage",
+`// program to calculate commission percentage
+class commission {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double sales = 50000, rate = 5;
+System.out.println("Commission = "+sales * rate / 100);  // 2500.0
+}
+}`,
+"commission.java", "Commission = 2500.0"],
+    [50, "Java Pogram To Find Distance Between Two Points",
+`// program to find distance between two points
+class pointdistance {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double x1 = 1, y1 = 2, x2 = 4, y2 = 6;
+System.out.println(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));  // 5.0
+}
+}`,
+"pointdistance.java", "5.0"],
+    [60, "Write a Java program to display the cube of the number upto given an integer",
+`// program to display the cube of the number upto given an integer
+class cubesupto {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 5;
+// loop i from 1 to n
+for (int i = 1; i <= n; i++) System.out.println("Cube of "+i+" = "+i * i * i);
+}
+}`,
+"cubesupto.java", "Cube of 1 = 1\nCube of 2 = 8\nCube of 3 = 27\nCube of 4 = 64\nCube of 5 = 125"],
+    [61, "Write a Java program to display the n terms of odd natural number and their sum",
+`// program to display the n terms of odd natural number and their sum
+class oddterms {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 5, sum = 0;
+// loop i from 1 to n
+for (int i = 1; i <= n; i++) {
+int odd = 2 * i - 1;
+System.out.print(odd+" ");
+sum += odd;
+}
+System.out.println(" Sum = "+sum);  // 1 3 5 7 9  sum = 25
+}
+}`,
+"oddterms.java", "1 3 5 7 9  Sum = 25"],
+    [62, "Write a Java program to display the multiplication table of a given integer",
+`// program to display the multiplication table of a given integer
+class multiplytable {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 7;
+// loop i from 1 to 10
+for (int i = 1; i <= 10; i++) System.out.println(n+" x "+i+" = "+n * i);
+}
+}`,
+"multiplytable.java", "7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63\n7 x 10 = 70"],
+    [63, "Write a Java program that reads an integer and check whether it is negative, zero, or positive",
+`// program to reads an integer and check whether it is negative, zero, or positive
+class signcheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = -5;
+if (n > 0) System.out.println("Positive");
+else if (n < 0) System.out.println("Negative");
+else System.out.println("Zero");
+}
+}`,
+"signcheck.java", "Negative"],
+    [64, "Write a Java program that reads an positive integer and count the number of digits",
+`// program to reads an positive integer and count the number of digits
+class digitcount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 98765, c = 0;
+// keep going while n is greater than 0
+while (n > 0) {
+c++;
+n /= 10;
+}
+System.out.println(c);  // 5
+}
+}`,
+"digitcount.java", "5"],
+    [65, "Write a Java program that accepts three numbers and check All numbers are equal or not",
+`// program to accepts three numbers and check all numbers are equal or not
+class allequal {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 5, b = 5, c = 5;
+System.out.println(a == b && b == c ? "All numbers are equal" : "Not equal");
+}
+}`,
+"allequal.java", "All numbers are equal"],
+    [66, "Write a java program that accepts three numbers and check if numbers are in increasing or decreasing order",
+`// program to accepts three numbers and check if numbers are in increasing or decreasing order
+class ordercheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 3, b = 7, c = 9;
+if (a < b && b < c) System.out.println("Increasing order");
+else if (a > b && b > c) System.out.println("Decreasing order");
+else System.out.println("Neither");
+}
+}`,
+"ordercheck.java", "Increasing order"],
+    [67, "Write a Java program that determines a student's grade",
+`// program to determines a student's grade
+class gradecheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int marks = 82;
+String g;
+if (marks >= 90) g = "A+";
+else if (marks >= 80) g = "A";
+else if (marks >= 70) g = "B";
+else if (marks >= 60) g = "C";
+else if (marks >= 40) g = "D";
+else g = "Fail";
+System.out.println("Grade: "+g);  // a
+}
+}`,
+"gradecheck.java", "Grade: A"],
+    [68, "Write a Java program to create a simple calculator",
+`import java.util.Scanner;
+// program to create a simple calculator
+class calculator {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+double a = sc.nextDouble();
+char op = sc.next().charAt(0);
+double b = sc.nextDouble();
+// pick the case that matches op
+switch (op) {
+case '+': System.out.println(a + b);
+break;
+case '-': System.out.println(a - b);
+break;
+case '*': System.out.println(a * b);
+break;
+case '/': System.out.println(b != 0?a / b:"Cannot divide by zero");
+break;
+default: System.out.println("Invalid operator");
+}
+}
+}`,
+"calculator.java", "5\n3\n7\nInvalid operator"],
+    [69, "Write a Java program to concatenate two string",
+`// program to concatenate two string
+class concatstrings {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String a = "Hello", b = "World";
+System.out.println(a+" "+b);  // using +
+System.out.println(a.concat(b));  // using concat()
+}
+}`,
+"concatstrings.java", "Hello World\nHelloWorld"],
+    [70, "Write a Java program to convert all characters in a string to lowercase",
+`// program to convert all characters in a string to lowercase
+class lowercase {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+System.out.println("HeLLo WoRLD".toLowerCase());  // hello world
+}
+}`,
+"lowercase.java", "hello world"],
+    [71, "Write a Java program to convert all characters in a string to uppercase",
+`// program to convert all characters in a string to uppercase
+class uppercase {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+System.out.println("Hello World".toUpperCase());  // hello world
+}
+}`,
+"uppercase.java", "HELLO WORLD"],
+    [72, "Write a Java program to trim a string(remove whitespaces)",
+`// program to trim a string
+class trimstring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "   Java   ";
+System.out.println("["+s.trim()+"]");  // [java]
+}
+}`,
+"trimstring.java", "[Java]"],
+    [73, "Write a Java program to get a substring of a given string between two specified positions",
+`// program to get a substring of a given string between two specified positions
+class substring {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Programming";
+System.out.println(s.substring(3, 7));  // gram
+}
+}`,
+"substring.java", "gram"],
+    [74, "Write a Java program to replace all the 'd' characters with 'f' characters",
+`// program to replace all the 'd' characters with 'f' characters
+class replaced {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "dad did dodo";
+System.out.println(s.replace('d', 'f'));  // faf fif fofo
+}
+}`,
+"replaced.java", "faf fif fofo"],
+    [75, "Write a java program to get the length of a given string",
+`// program to get the length of a given string
+class stringlength {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+System.out.println("Hello World".length());  // 11
+}
+}`,
+"stringlength.java", "11"],
+    [76, "Write a java program to print current date and time in the specified format",
+`// program to print current date and time in the specified format
+class datetimeformat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+java.time.LocalDateTime d = java.time.LocalDateTime.now();
+System.out.println(d.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+}
+}`,
+"datetimeformat.java", "11/10/2026 09:02:52"],
+    [77, "Write a Java program to get the character at the given index within the String",
+`// program to get the character at the given index within the string
+class charat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Programming";
+System.out.println(s.charAt(4));  // r
+}
+}`,
+"charat.java", "r"],
+    [78, "Write a java program to remove a particular character from a string",
+`// program to remove a particular character from a string
+class deletechar {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Hello World";
+char ch = 'l';
+System.out.println(s.replace(String.valueOf(ch), ""));  // heo word
+}
+}`,
+"deletechar.java", "Heo Word"],
+    [79, "Write a java program to reverse a String",
+`// program to reverse a string
+class stringreverse {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "Java";
+String r = "";
+// count i down from s.length() - 1 to 0
+for (int i = s.length() - 1; i >= 0; i--) r += s.charAt(i);
+System.out.println(r);  // avaj
+}
+}`,
+"stringreverse.java", "avaJ"],
+    [80, "Write a java program to remove html tags from a string",
+`// program to remove html tags from a string
+class removehtml {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String html = "<p>Hello <b>World</b></p>";
+System.out.println(html.replaceAll("<[^>]*>", ""));  // hello world
+}
+}`,
+"removehtml.java", "Hello World"],
+    [81, "Write a java program to count total number of lines from a string",
+`// program to count total number of lines from a string
+class linecount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String s = "line one\\nline two\\nline three";
+System.out.println(s.split("\\\\R").length);  // 3
+}
+}`,
+"linecount.java", "3"],
+    [82, "Write a Java program to sum values of an array",
+`// program to sum values of an array
+class sumarray {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+int sum = 0;
+// take each x from a one by one
+for (int x : a) sum += x;
+System.out.println(sum);  // 15
+}
+}`,
+"sumarray.java", "15"],
+    [83, "Write a Java program to find the index of an array element",
+`// program to find the index of an array element
+class findindex {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {10, 20, 30, 40};
+int key = 30, idx = -1;
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) if (a[i] == key) {
+idx = i;
+break;
+}
+System.out.println(idx);  // 2
+}
+}`,
+"findindex.java", "2"],
+    [84, "Write a Java program to calculate the average value of array elements",
+`// program to calculate the average value of array elements
+class arrayaverage {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {10, 20, 30, 40};
+double sum = 0;
+// take each x from a one by one
+for (int x : a) sum += x;
+System.out.println(sum / a.length);  // 25.0
+}
+}`,
+"arrayaverage.java", "25.0"],
+    [85, "Write a Java program to test if an array contains a specific value",
+`// program to test if an array contains a specific value
+class arraycontains {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {5, 8, 12, 20};
+int key = 12;
+boolean f = false;
+// take each x from a one by one
+for (int x : a) if (x == key) {
+f = true;
+break;
+}
+System.out.println(f);  // true
+}
+}`,
+"arraycontains.java", "true"],
+    [86, "Write a Java program to find the maximum and minimum value of an array",
+`// program to find the maximum and minimum value of an array
+class maxmin {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {7, 3, 19, 4, 11};
+int max = a[0], min = a[0];
+// take each x from a one by one
+for (int x : a) {
+if (x > max) max = x;
+if (x < min) min = x;
+}
+System.out.println("Max="+max+" Min="+min);  // max=19 min=3
+}
+}`,
+"maxmin.java", "Max=19 Min=3"],
+    [87, "Write a Java program to insert an element (specific position) into an array",
+`// program to insert an element
+class insertelement {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 4, 5};
+int pos = 2, val = 3;
+int[] b = new int[a.length + 1];
+// visit each element of b one by one
+for (int i = 0, j = 0; i < b.length; i++) b[i] = (i == pos)?val:a[j++];
+System.out.println(java.util.Arrays.toString(b));  // [1, 2, 3, 4, 5]
+}
+}`,
+"insertelement.java", "[1, 2, 3, 4, 5]"],
+    [88, "Write a Java program to reverse an array of integer values",
+`// program to reverse an array of integer values
+class reverseints {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+// count i down from 0 to just above j
+for (int i = 0, j = a.length - 1; i < j; i++, j--) {
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+System.out.println(java.util.Arrays.toString(a));  // [5, 4, 3, 2, 1]
+}
+}`,
+"reverseints.java", "[5, 4, 3, 2, 1]"],
+    [89, "Write a Java program to find the common elements between two arrays",
+`// program to find the common elements between two arrays
+class commonelements {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5}, b = {4, 5, 6, 7};
+// take each x from a one by one
+for (int x : a) for (int y : b) if (x == y) System.out.print(x+" ");  // 4 5
+}
+}`,
+"commonelements.java", "4 5 "],
+    [90, "Write a Java program to find the duplicate values of an array of integer values",
+`// program to find the duplicate values of an array of integer values
+class duplicatevalues {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 2, 4, 3};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++)
+// go through a starting from index i + 1
+for (int j = i + 1; j < a.length; j++)
+if (a[i] == a[j]) System.out.print(a[i]+" ");  // 2 3
+}
+}`,
+"duplicatevalues.java", "2 3 "],
+    [91, "Write a Java program to convert an array to ArrayList",
+`// program to convert an array to arraylist
+class arraytolist {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String[] arr = {"Java", "C", "Python"};
+java.util.List<String> list = new java.util.ArrayList<>(java.util.Arrays.asList(arr));
+System.out.println(list);  // [java, c, python]
+}
+}`,
+"arraytolist.java", "[Java, C, Python]"],
+    [92, "Write a Java program to add two matrices of the same size",
+`// program to add two matrices of the same size
+class matrixsum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2}, {3, 4}}, b = {{5, 6}, {7, 8}}, c = new int[2][2];
+// loop i from 0 to 1
+for (int i = 0; i < 2; i++) for (int j = 0; j < 2; j++) c[i][j] = a[i][j] + b[i][j];
+System.out.println(java.util.Arrays.deepToString(c));  // [[6, 8], [10, 12]]
+}
+}`,
+"matrixsum.java", "[[6, 8], [10, 12]]"],
+    [93, "Write a Java program to find second largest number from the array",
+`// program to find second largest number from the array
+class secondmax {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {12, 45, 7, 45, 30};
+int l = Integer.MIN_VALUE, s = Integer.MIN_VALUE;
+// take each x from a one by one
+for (int x : a) {
+if (x > l) {
+s = l;
+l = x;
+} else if (x > s && x != l) s = x;
+}
+System.out.println(s);  // 30
+}
+}`,
+"secondmax.java", "30"],
+    [94, "Write a Java program to find second lowest number from the array",
+`// program to find second lowest number from the array
+class secondmin {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {12, 45, 7, 45, 30};
+int m = Integer.MAX_VALUE, s = Integer.MAX_VALUE;
+// take each x from a one by one
+for (int x : a) {
+if (x < m) {
+s = m;
+m = x;
+} else if (x < s && x != m) s = x;
+}
+System.out.println(s);  // 12
+}
+}`,
+"secondmin.java", "12"],
+    [95, "Write a Java program to find the number of even and odd integers in a given array of integers",
+`// program to find the number of even and odd integers in a given array of integers
+class countevenodd {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5, 6, 7, 8};
+int e = 0, o = 0;
+// take each x from a one by one
+for (int x : a) if (x % 2 == 0) e++;
+else o++;
+System.out.println("Even="+e+" Odd="+o);  // 4, 4
+}
+}`,
+"countevenodd.java", "Even=4 Odd=4"],
+    [96, "Write a Java program to get the difference between the largest and smallest values in an array of integers",
+`// program to get the difference between the largest and smallest values in an array of integers
+class maxmindiff {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {10, 3, 15, 8};
+int max = a[0], min = a[0];
+// take each x from a one by one
+for (int x : a) {
+if (x > max) max = x;
+if (x < min) min = x;
+}
+System.out.println(max - min);  // 12
+}
+}`,
+"maxmindiff.java", "12"],
+    [98, "Write a Java program to cyclically rotate a given array clockwise by one",
+`// program to cyclically rotate a given array clockwise by one
+class rotateone {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 3, 4, 5};
+int last = a[a.length - 1];
+// count i down from a.length - 1 to just above 0
+for (int i = a.length - 1; i > 0; i--) a[i] = a[i - 1];
+a[0] = last;
+System.out.println(java.util.Arrays.toString(a));  // [5, 1, 2, 3, 4]
+}
+}`,
+"rotateone.java", "[5, 1, 2, 3, 4]"],
+    [99, "java program to print all unique element in an array",
+`// program to print all unique element in an array
+class uniqueelements {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {1, 2, 2, 3, 4, 4, 5};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) {
+int c = 0;
+for (int j = 0; j < a.length; j++) if (a[i] == a[j]) c++;
+if (c == 1) System.out.print(a[i]+" ");  // 1 3 5
+}
+}
+}`,
+"uniqueelements.java", "1 3 5 "],
+    [100, "Write a Java Program to Sort the Array in an Ascending Order",
+`// program to sort the array in an ascending order
+class ascendingsort {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {5, 2, 9, 1, 7};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) for (int j = i + 1; j < a.length; j++)
+if (a[i] > a[j]) {
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+System.out.println(java.util.Arrays.toString(a));  // [1, 2, 5, 7, 9]
+}
+}`,
+"ascendingsort.java", "[1, 2, 5, 7, 9]"],
+    [101, "Write a Java Program to Sort the Array in an Descending Order",
+`// program to sort the array in an descending order
+class descendingsort {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {5, 2, 9, 1, 7};
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) for (int j = i + 1; j < a.length; j++)
+if (a[i] < a[j]) {
+int t = a[i];
+a[i] = a[j];
+a[j] = t;
+}
+System.out.println(java.util.Arrays.toString(a));  // [9, 7, 5, 2, 1]
+}
+}`,
+"descendingsort.java", "[9, 7, 5, 2, 1]"],
+    [102, "Write a Java Program to Sort Names in an Alphabetical Order",
+`// program to sort names in an alphabetical order
+class sortnames {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+String[] n = {"Ravi", "Anu", "Mohan", "Deepa"};
+java.util.Arrays.sort(n);
+System.out.println(java.util.Arrays.toString(n));  // [anu, deepa, mohan, ravi]
+}
+}`,
+"sortnames.java", "[Anu, Deepa, Mohan, Ravi]"],
+    [103, "Write a Java Program to Display Transpose Matrix",
+`// program to display transpose matrix
+class showtranspose {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[][] a = {{1, 2, 3}, {4, 5, 6}}, t = new int[3][2];
+// loop i from 0 to 1
+for (int i = 0; i < 2; i++) for (int j = 0; j < 3; j++) t[j][i] = a[i][j];
+// take each r from t one by one
+for (int[] r : t) {
+// take each x from r one by one
+for (int x : r) System.out.print(x+" ");
+System.out.println();
+}
+}
+}`,
+"showtranspose.java", "1 4 \n2 5 \n3 6 "],
+    [104, "Write a Java Program to Search Key Elements in an Array",
+`// program to search key elements in an array
+class searchkey {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int[] a = {4, 8, 15, 16, 23, 42};
+int key = 16;
+boolean found = false;
+// visit each element of a one by one
+for (int i = 0; i < a.length; i++) if (a[i] == key) {
+System.out.println("Found at index "+i);
+found = true;
+}
+if (!found) System.out.println("Not found");
+}
+}`,
+"searchkey.java", "Found at index 3"],
+    [105, "Write a Java Program to Accept the Marks of a Student and find Total Marks and Percentage",
+`import java.util.Scanner;
+// program to accept the marks of a student and find total marks and percentage
+class studentmarks {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int total = 0;
+// loop i from 1 to 5
+for (int i = 1; i <= 5; i++) {
+System.out.print("Marks "+i+": ");
+total += sc.nextInt();
+}
+System.out.println("Total="+total+" Percentage="+total / 5.0+"%");
+}
+}`,
+"studentmarks.java", "Marks 1: 5\nMarks 2: 3\nMarks 3: 7\nMarks 4: 2\nMarks 5: 9\nTotal=26 Percentage=5.2%"],
+    [106, "Write a java program to print numbers from 1 to 10 using loop",
+`// program to print numbers from 1 to 10 using loop
+class printto10 {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+// loop i from 1 to 10
+for (int i = 1; i <= 10; i++) System.out.print(i+" ");
+}
+}`,
+"printto10.java", "1 2 3 4 5 6 7 8 9 10 "],
+    [107, "Write a java program to calculate the sum of first 10 natural number using loop",
+`// program to calculate the sum of first 10 natural number using loop
+class sumten {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int sum = 0;
+// loop i from 1 to 10
+for (int i = 1; i <= 10; i++) sum += i;
+System.out.println(sum);  // 55
+}
+}`,
+"sumten.java", "55"],
+    [108, "Write a Java program to print multiplication table of given number",
+`// program to print multiplication table of given number
+class tableofn {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 9;
+// loop i from 1 to 10
+for (int i = 1; i <= 10; i++) System.out.println(n+" x "+i+" = "+n * i);
+}
+}`,
+"tableofn.java", "9 x 1 = 9\n9 x 2 = 18\n9 x 3 = 27\n9 x 4 = 36\n9 x 5 = 45\n9 x 6 = 54\n9 x 7 = 63\n9 x 8 = 72\n9 x 9 = 81\n9 x 10 = 90"],
+    [109, "Write a Java program to find the factorial value of any number entered through the keyboard",
+`import java.util.Scanner;
+// program to find the factorial value of any number entered through the keyboard
+class factorialloop {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int n = sc.nextInt();
+long f = 1;
+// loop i from 2 to n
+for (int i = 2; i <= n; i++) f *= i;
+System.out.println(n+"! = "+f);
+}
+}`,
+"factorialloop.java", "5\n5! = 120"],
+    [110, "Write a Java program that prompts the user to input an integer and then outputs the number with the digits reversed order",
+`import java.util.Scanner;
+// program to prompts the user to input an integer and then outputs the number with the digits reversed order
+class reversedigits {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int n = sc.nextInt(), r = 0;
+// keep going while n is greater than 0
+while (n > 0) {
+r = r * 10 + n % 10;
+n /= 10;
+}
+System.out.println(r);  // 1234 -> 4321
+}
+}`,
+"reversedigits.java", "5\n5"],
+    [111, "Write a Java program that reads a set of integers, and then prints the sum of the even and odd integers using loop",
+`import java.util.Scanner;
+// program to reads a set of integers, and then prints the sum of the even and odd integers using loop
+class evenoddsum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int n = sc.nextInt(), se = 0, so = 0;
+// loop i from 0 to n - 1
+for (int i = 0; i < n; i++) {
+int x = sc.nextInt();
+if (x % 2 == 0) se += x;
+else so += x;
+}
+System.out.println("Even sum="+se+" Odd sum="+so);
+}
+}`,
+"evenoddsum.java", "5\n3\n7\n2\n9\n4\nEven sum=6 Odd sum=19"],
+    [112, "Write a Java program to check whether the number is a prime number or not",
+`// program to check whether the number is a prime number or not
+class primecheck {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 29;
+boolean p = n > 1;
+// repeat while i * i <= n
+for (int i = 2; i * i <= n; i++) if (n % i == 0) {
+p = false;
+break;
+}
+System.out.println(p?"Prime":"Not prime");
+}
+}`,
+"primecheck.java", "Prime"],
+    [113, "Write a Java program to calculate HCF of Two given numbers using loop",
+`// program to calculate hcf of two given numbers using loop
+class hcf {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 48, b = 18, hcf = 1;
+// loop i from 1 while i <= Math.min(a, b)
+for (int i = 1; i <= Math.min(a, b); i++) if (a % i == 0 && b % i == 0) hcf = i;
+System.out.println(hcf);  // 6
+}
+}`,
+"hcf.java", "6"],
+    [114, "Write a Java program to enter the numbers till the user wants and at the end it should display the count of positive, negative and zeros",
+`import java.util.Scanner;
+// program to enter the numbers till the user wants and at the end it should display the count of positive,
+class countsigns {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int p = 0, n = 0, z = 0;
+char ch;
+// run the body once, then repeat while the condition holds
+do {
+int x = sc.nextInt();
+if (x > 0) p++;
+else if (x < 0) n++;
+else z++;
+System.out.print("Continue (y/n)? ");
+ch = sc.next().charAt(0);
+} while (ch == 'y');
+System.out.println("Positive="+p+" Negative="+n+" Zeros="+z);
+}
+}`,
+"countsigns.java", "5\nContinue (y/n)? y\n-3\nContinue (y/n)? y\n0\nContinue (y/n)? n\nPositive=1 Negative=1 Zeros=1"],
+    [115, "Write a Java program to enter the numbers till the user wants and at the end the program should display the largest and smallest numbers entered",
+`import java.util.Scanner;
+// program to enter the numbers till the user wants and at the end the program should display the largest
+class largesmall {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+char ch;
+// run the body once, then repeat while the condition holds
+do {
+int x = sc.nextInt();
+if (x > max) max = x;
+if (x < min) min = x;
+System.out.print("Continue (y/n)? ");
+ch = sc.next().charAt(0);
+} while (ch == 'y');
+System.out.println("Largest="+max+" Smallest="+min);
+}
+}`,
+"largesmall.java", "5\nContinue (y/n)? y\n-3\nContinue (y/n)? y\n9\nContinue (y/n)? n\nLargest=9 Smallest=-3"],
+    [116, "Write a Java program to print out all Armstrong numbers between 1 to 600 using loop",
+`// program to print out all armstrong numbers between 1 to 600 using loop
+class armstrong {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+// loop i from 1 to 600
+for (int i = 1; i <= 600; i++) {
+int t = i, s = 0;
+// keep going while t is greater than 0
+while (t > 0) {
+int d = t % 10;
+s += d * d * d;
+t /= 10;
+}
+if (s == i) System.out.print(i+" ");  // 1 153 370 371 407
+}
+}
+}`,
+"armstrong.java", "1 153 370 371 407 "],
+    [117, "Write a java program to count total number of notes in entered amount using loop",
+`// program to count total number of notes in entered amount using loop
+class notecount {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int amount = 2875;
+int[] notes = {500, 200, 100, 50, 20, 10, 5, 2, 1};
+// take each n from notes one by one
+for (int n : notes) {
+int c = amount / n;
+if (c > 0) System.out.println(n+" x "+c);
+amount %= n;
+}
+}
+}`,
+"notecount.java", "500 x 5\n200 x 1\n100 x 1\n50 x 1\n20 x 1\n5 x 1"],
+    [118, "Write a Java program to print Fibonacci series of n terms using loop",
+`// program to print fibonacci series of n terms using loop
+class fibonacci {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 8, a = 0, b = 1;
+// loop i from 0 to n - 1
+for (int i = 0; i < n; i++) {
+System.out.print(a+" ");
+int c = a + b;
+a = b;
+b = c;
+}   // 0 1 1 2 3 5 8 13
+}
+}`,
+"fibonacci.java", "0 1 1 2 3 5 8 13 "],
+    [119, "Write a java program to calculate the sum of following series where n is input by user (series assumed: 1 + 1/2 + 1/3 + ... + 1/n)",
+`import java.util.Scanner;
+// program to calculate the sum of following series where n is input by user
+class seriessum {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+int n = sc.nextInt();
+double sum = 0;
+// loop i from 1 to n
+for (int i = 1; i <= n; i++) sum += 1.0 / i;
+System.out.println("Sum = "+sum);
+}
+}`,
+"seriessum.java", "5\nSum = 2.283333333333333"],
+    [120, "Write a Java method to compute the average of three numbers",
+`// program to compute the average of three numbers
+class avgmethod {
+// method to compute the average of three numbers
+static double average(double a, double b, double c) {
+return (a + b + c) / 3;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(average(10, 20, 30));
+}
+}`,
+"avgmethod.java", "20.0"],
+    [121, "Write a Java method to find the smallest number among three numbers",
+`// program to find the smallest number among three numbers
+class minmethod {
+// method to find the smallest number among three numbers
+static int smallest(int a, int b, int c) {
+return Math.min(a, Math.min(b, c));
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(smallest(25, 37, 29));
+}
+}`,
+"minmethod.java", "25"],
+    [122, "Write a Java method to count all words in a string",
+`// program to count all words in a string
+class wordsmethod {
+// method to count all words in a string
+static int countWords(String s) {
+s = s.trim();
+return s.isEmpty()?0:s.split("\\\\s+").length;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(countWords("Java is a programming language"));
+}
+}`,
+"wordsmethod.java", "5"],
+    [123, "Write a Java method to count all vowels in a string",
+`// program to count all vowels in a string
+class vowelsmethod {
+// method to count all vowels in a string
+static int countVowels(String s) {
+int c = 0;
+// take each ch from s.toLowerCase( one by one
+for (char ch : s.toLowerCase().toCharArray()) if ("aeiou".indexOf(ch) >= 0) c++;
+return c;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(countVowels("Programming"));
+}
+}`,
+"vowelsmethod.java", "3"],
+    [124, "Write a Java method to compute the sum of the digits in an integer",
+`// program to compute the sum of the digits in an integer
+class digitsmethod {
+// method to compute the sum of the digits in an integer
+static int sumDigits(int n) {
+int s = 0;
+n = Math.abs(n);
+// keep going while n is greater than 0
+while (n > 0) {
+s += n % 10;
+n /= 10;
+}
+return s;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(sumDigits(1234));
+}
+}`,
+"digitsmethod.java", "10"],
+    [125, "Write a Java method to check whether an year entered by the user is a leap year or not",
+`// program to check whether an year entered by the user is a leap year or not
+class leapyear {
+// method to check whether an year entered by the user is a leap year or not
+static boolean isLeap(int y) {
+return (y % 4 == 0 && y % 100 != 0) || y % 400 == 0;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(isLeap(2024));
+System.out.println(isLeap(1900));
+}
+}`,
+"leapyear.java", "true\nfalse"],
+    [126, "Write a Java method to calculate the area of a triangle",
+`// program to calculate the area of a triangle
+class triarea {
+// method to calculate the area of a triangle
+static double triangleArea(double b, double h) {
+return 0.5 * b * h;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(triangleArea(6, 4));
+}
+}`,
+"triarea.java", "12.0"],
+    [127, "Write a Java method to find the area of a pentagon",
+`// program to find the area of a pentagon
+class pentagonarea {
+// method to find the area of a pentagon
+static double pentagonArea(double s) {  // regular pentagon with side s
+return 0.25 * Math.sqrt(5 * (5 + 2 * Math.sqrt(5))) * s * s;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(pentagonArea(5));
+}
+}`,
+"pentagonarea.java", "43.01193501472417"],
+    [128, "Write a Java method to find number is even number or not",
+`// program to find number is even number or not
+class evencheck {
+// method to find number is even number or not
+static boolean isEven(int n) {
+return n % 2 == 0;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(isEven(10));
+System.out.println(isEven(7));
+}
+}`,
+"evencheck.java", "true\nfalse"],
+    [129, "Write a Java method to check numbers is palindrome number or not",
+`// program to check numbers is palindrome number or not
+class palindromenum {
+// method to check numbers is palindrome number or not
+static boolean isPalindrome(int n) {
+int t = n, r = 0;
+// keep going while t is greater than 0
+while (t > 0) {
+r = r * 10 + t % 10;
+t /= 10;
+}
+return r == n;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(isPalindrome(121));
+System.out.println(isPalindrome(123));
+}
+}`,
+"palindromenum.java", "true\nfalse"],
+    [130, "Write a Java method to displays prime numbers between 1 to 20",
+`// program to displays prime numbers between 1 to 20
+class primesto20 {
+// method to displays prime numbers between 1 to 20
+static void primes() {
+// loop n from 2 to 20
+for (int n = 2; n <= 20; n++) {
+boolean p = true;
+// repeat while i * i <= n
+for (int i = 2; i * i <= n; i++) if (n % i == 0) {
+p = false;
+break;
+}
+if (p) System.out.print(n+" ");  // 2 3 5 7 11 13 17 19
+}
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+primes();
+}
+}`,
+"primesto20.java", "2 3 5 7 11 13 17 19 "],
+    [131, "Write a Java method to find GCD and LCM of Two Numbers",
+`// program to find gcd and lcm of two numbers
+class gcdlcm {
+// method to find gcd and lcm of two numbers
+static int gcd(int a, int b) {
+return b == 0?a:gcd(b, a % b);
+}
+// returns the lcm
+static int lcm(int a, int b) {
+return a / gcd(a, b) * b;
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(gcd(12, 18));
+}
+}`,
+"gcdlcm.java", "6"],
+    [132, "Write a Java method to find factorial using recursion in java",
+`// program to find factorial using recursion in java
+class recursivefact {
+// method to find factorial using recursion in java
+static long fact(int n) {
+return n <= 1?1:n * fact(n - 1);
+}
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println(fact(5));
+}
+}`,
+"recursivefact.java", "120"],
+    [133, "Write a Java program to reverse an integer number",
+`// program to reverse an integer number
+class reversenumber {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int n = 12345, r = 0;
+// keep going while n is not equal to 0
+while (n != 0) {
+r = r * 10 + n % 10;
+n /= 10;
+}
+System.out.println(r);  // 54321
+}
+}`,
+"reversenumber.java", "54321"],
+    [134, "Write a Java program to round a float number to specified decimals",
+`// program to round a float number to specified decimals
+class roundfloat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+float f = 3.14159f;
+int places = 2;
+double scale = Math.pow(10, places);
+System.out.println(Math.round(f * scale) / scale);  // 3.14
+System.out.println(String.format("%.2f", f));  // 3.14
+}
+}`,
+"roundfloat.java", "3.14\n3.14"],
+    [135, "Write a Java program to test if a double number is an integer",
+`// program to test if a double number is an integer
+class isinteger {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+double d = 5.0;
+System.out.println(d == Math.floor(d) && !Double.isInfinite(d));  // true
+}
+}`,
+"isinteger.java", "true"],
+    [136, "Write a Java program to round up the result of integer division",
+`// program to round up the result of integer division
+class roundupdiv {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+int a = 10, b = 3;
+System.out.println((a + b - 1) / b);  // 4
+System.out.println((int) Math.ceil((double) a / b));  // 4
+}
+}`,
+"roundupdiv.java", "4\n4"],
+    [138, "Write a Java program to convert a float value to absolute value",
+`// program to convert a float value to absolute value
+class absfloat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+float f = -7.25f;
+System.out.println(Math.abs(f));  // 7.25
+}
+}`,
+"absfloat.java", "7.25"],
+    [139, "Write a Java program to accept a float value of number and return a rounded float value",
+`import java.util.Scanner;
+// program to accept a float value of number and return a rounded float value
+class roundedfloat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+float f = sc.nextFloat();
+System.out.println(Math.round(f));  // 7.6 -> 8
+}
+}`,
+"roundedfloat.java", "5\n5"]
+  ]
+  },
+  {
+  name: "Packages",
+  questions: [
+    [1, "Access java.util.Date through the import keyword and print the current date.",
+`import java.util.Date;
+// program to access java.util.date through the import keyword and print the current date
+class dateimport {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+System.out.println(new Date());
+}
+}`,
+"dateimport.java", "Sun Oct 11 09:04:23 UTC 2026"],
+    [2, "Access java.util.Date in the qualified way and print the current date.",
+`// program to access java.util.date in the qualified way and print the current date
+class datequalified {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+System.out.println(new java.util.Date());
+}
+}`,
+"datequalified.java", "Sun Oct 11 09:04:23 UTC 2026"],
+    [3, "Access java.util.Date through import and print the current date, but inherit the Date class",
+`import java.util.Date;
+// program to access java.util.date through import and print the current date, but inherit the date class
+class dateinherit extends Date {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+dateinherit d = new dateinherit();
+System.out.println(d);
+}
+}`,
+"dateinherit.java", "Sun Oct 11 09:04:27 UTC 2026"],
+    [4, "Access java.util.Date in the qualified way and print the current date, but inherit the Date class",
+`// program to access java.util.date in the qualified way and print the current date, but inherit the date
+class datequalinherit extends java.util.Date {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+System.out.println(new datequalinherit());
+}
+}`,
+"datequalinherit.java", "Sun Oct 11 09:04:27 UTC 2026"],
+    [5, "Create a package with multiple default classes",
+`// file: pack1/defaultclasses.java
+package pack1;
+// class a
+class A {
+// shows
+void show() {
+System.out.println("Class A");
+}
+}
+// class b
+class B {
+// shows
+void show() {
+System.out.println("Class B");
+}
+}
+// program to create a package with multiple default classes
+class defaultclasses {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new A().show();
+new B().show();
+}
+}
+// compile: javac pack1/defaultclasses.java   run: java pack1.defaultclasses`,
+"defaultclasses.java", "Class A\nClass B"],
+    [6, "Create a package with 4 public classes, create the objects in another file and call their functions",
+`// each public class goes in its own file inside the folder 'shapes'
+package shapes;
+// class circle
+public class Circle {
+// draws
+public void draw() {
+System.out.println("Circle");
+}
+}
+// square.java, triangle.java and line.java are written the same way
+// file: shapesdemo.java
+import shapes.*;
+// program to create a package with 4 public classes, create the objects in another file and call their
+class shapesdemo {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new Circle().draw();
+new Square().draw();
+new Triangle().draw();
+new Line().draw();
+}
+}`,
+"shapesdemo.java", "Circle\nSquare\nTriangle\nLine"],
+    [7, "Employee payroll processing using packages (Emp.java and Emppay.java)",
+`// file: employee/emp.java
+package employee;
+// class emp: keeps name, empid, category, bpay and more
+public class Emp {
+String name = "Ravi";
+int empid = 101;
+String category = "A";
+double bpay = 20000, hra, da, pf, allowance, grosspay, incometax, npay;
+// calculates
+public void calculate() {
+hra = 0.2 * bpay;
+da = 0.5 * bpay;
+allowance = 1000;
+pf = 0.12 * bpay;
+grosspay = bpay + hra + da + allowance;
+incometax = grosspay > 30000?0.1 * grosspay:0;
+npay = grosspay - pf - incometax;
+}
+// displays
+public void display() {
+System.out.println(empid+" "+name+" Category "+category);
+System.out.println("Gross="+grosspay+" PF="+pf+" Tax="+incometax+" Net="+npay);
+}
+}
+// file: payroll.java
+import employee.Emp;
+// program to employee payroll processing using packages
+class payroll {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+Emp e = new Emp();
+e.calculate();
+e.display();
+}
+}`,
+"Emp.java", "101 Ravi Category A\nGross=35000.0 PF=2400.0 Tax=3500.0 Net=29100.0"],
+    [8, "Package with a public class and protected members accessed in another class",
+`// file: p1/a.java
+package p1;
+// class a
+public class A {
+// does the msg work
+protected void msg() {
+System.out.println("Protected msg");
+}
+}
+// file: p2/protectedtest.java
+package p2;
+import p1.A;
+// program to package with a public class and protected members accessed in another class
+class protectedtest extends A {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new protectedtest().msg();
+}
+}`,
+"A.java", "Protected msg"],
+    [9, "Nested package c4.sample with a public class and protected members accessed in another class",
+`// file: c4/sample/a.java
+package c4.sample;
+// class a
+public class A {
+// does the msg work
+protected void msg() {
+System.out.println("Nested package protected");
+}
+}
+// file: nestedpackage.java
+import c4.sample.A;
+// program to nested package c4.sample with a public class and protected members accessed in another class
+class nestedpackage extends A {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new nestedpackage().msg();
+}
+}`,
+"A.java", "Nested package protected"],
+    [10, "Package with a public class and public members accessed in another class",
+`// file: mypack/a.java
+package mypack;
+// class a: keeps x
+public class A {
+public int x = 10;
+// does the msg work
+public void msg() {
+System.out.println("Public msg, x="+x);
+}
+}
+// file: publicmembers.java
+import mypack.A;
+// program to package with a public class and public members accessed in another class
+class publicmembers {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new A().msg();
+}
+}`,
+"A.java", "Public msg, x=10"]
+  ]
+  },
+  {
+  name: "Inheritance",
+  questions: [
+    [1, "Class Animal with makeSound(); subclass Cat overrides makeSound().",
+`// class animal
+class Animal {
+// makes the sound
+void makeSound() {
+System.out.println("Animal sound");
+}
+}
+// cat extends animal, so it gets everything animal has
+class Cat extends Animal {
+// overrides makeSound() of the parent, with its own version
+@Override void makeSound() {
+System.out.println("Cat sound");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class animalsound {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new Cat().makeSound();
+}
+}`,
+"animalsound.java", "Cat sound"],
+    [2, "Class Vehicle with drive(); subclass Car overrides drive() to print \"Repairing a car\"",
+`// class vehicle
+class Vehicle {
+// drives
+void drive() {
+System.out.println("Vehicle is driving");
+}
+}
+// car extends vehicle, so it gets everything vehicle has
+class Car extends Vehicle {
+// overrides drive() of the parent, with its own version
+@Override void drive() {
+System.out.println("Repairing a car");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class vehicledrive {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Vehicle v = new Car();
+v.drive();
+}
+}`,
+"vehicledrive.java", "Repairing a car"],
+    [3, "Class Shape with getArea(); subclass Rectangle overrides it",
+`// class shape
+class Shape {
+// returns the area
+double getArea() {
+return 0;
+}
+}
+// rectangle extends shape, so it gets everything shape has
+class Rectangle extends Shape {
+double l = 5, b = 3;
+// overrides getArea() of the parent, with its own version
+@Override double getArea() {
+return l * b;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class shapearea {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Shape s = new Rectangle();
+System.out.println("Area = " + s.getArea());
+}
+}`,
+"shapearea.java", "Area = 15.0"],
+    [4, "Class Employee with work() and getSalary(); subclass HRManager overrides work() and adds addEmployee()",
+`// class employee
+class Employee {
+// works
+void work() {
+System.out.println("Employee works");
+}
+// returns the salary
+double getSalary() {
+return 30000;
+}
+}
+// hrmanager extends employee, so it gets everything employee has
+class HRManager extends Employee {
+// overrides work() of the parent, with its own version
+@Override void work() {
+System.out.println("HR manager manages staff");
+}
+// adds the employee
+void addEmployee(String n) {
+System.out.println(n+" added");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class employeework {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+HRManager h = new HRManager();
+h.work();
+h.addEmployee("Ravi");
+System.out.println("Salary = " + h.getSalary());
+}
+}`,
+"employeework.java", "HR manager manages staff\nRavi added\nSalary = 30000.0"],
+    [5, "BankAccount with deposit() and withdraw(); SavingsAccount prevents withdrawal if balance falls below 100",
+`// class bankaccount: keeps bal
+class BankAccount {
+double bal = 500;
+// deposits
+void deposit(double a) {
+bal += a;
+}
+// withdraws
+void withdraw(double a) {
+if (a <= bal) bal -= a;
+}
+}
+// savingsaccount extends bankaccount, so it gets everything bankaccount has
+class SavingsAccount extends BankAccount {
+// overrides withdraw() of the parent, with its own version
+@Override void withdraw(double a) {
+if (bal - a < 100) System.out.println("Withdrawal denied: balance would fall below 100");
+else bal -= a;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class bankaccountdemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+SavingsAccount s = new SavingsAccount();
+s.deposit(200);
+s.withdraw(550);
+s.withdraw(100);
+System.out.println("Balance = " + s.bal);
+}
+}`,
+"bankaccountdemo.java", "Withdrawal denied: balance would fall below 100\nBalance = 150.0"],
+    [6, "Class Animal with move(); subclass Cheetah overrides move() to run",
+`// class animal
+class Animal {
+// moves
+void move() {
+System.out.println("Animal moves");
+}
+}
+// cheetah extends animal, so it gets everything animal has
+class Cheetah extends Animal {
+// overrides move() of the parent, with its own version
+@Override void move() {
+System.out.println("Cheetah runs");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class animalmove {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Animal a = new Cheetah();
+a.move();
+}
+}`,
+"animalmove.java", "Cheetah runs"],
+    [7, "Class Person with getFirstName() and getLastName(); Employee adds getEmployeeId() and overrides getLastName() to include job title",
+`// class person: keeps first, last
+class Person {
+String first = "Ravi", last = "Sharma";
+// returns the first name
+String getFirstName() {
+return first;
+}
+// returns the last name
+String getLastName() {
+return last;
+}
+}
+// employee extends person, so it gets everything person has
+class Employee extends Person {
+int id = 101;
+String title = "Manager";
+// returns the employee id
+int getEmployeeId() {
+return id;
+}
+// overrides getLastName() of the parent, with its own version
+@Override String getLastName() {
+return last+" ("+title+")";
+}
+}
+// program to test the classes above by making objects and calling their methods
+class personname {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Employee e = new Employee();
+System.out.println(e.getFirstName() + " " + e.getLastName());
+System.out.println("Employee ID: " + e.getEmployeeId());
+}
+}`,
+"personname.java", "Ravi Sharma (Manager)\nEmployee ID: 101"],
+    [8, "Class Shape with getPerimeter() and getArea(); subclass Circle overrides both",
+`// class shape
+class Shape {
+// returns the perimeter
+double getPerimeter() {
+return 0;
+}
+// returns the area
+double getArea() {
+return 0;
+}
+}
+// circle extends shape, so it gets everything shape has
+class Circle extends Shape {
+double r = 7;
+// overrides getPerimeter() of the parent, with its own version
+@Override double getPerimeter() {
+return 2 * Math.PI * r;
+}
+// overrides getArea() of the parent, with its own version
+@Override double getArea() {
+return Math.PI * r * r;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class shapecircle {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Circle c = new Circle();
+System.out.println("Perimeter = " + c.getPerimeter());
+System.out.println("Area = " + c.getArea());
+}
+}`,
+"shapecircle.java", "Perimeter = 43.982297150257104\nArea = 153.93804002589985"],
+    [9, "Vehicle class hierarchy: Truck, Car and Motorcycle with make, model, year, fuel type; methods for fuel efficiency, distance travelled and maximum speed",
+`// class vehicle: keeps make, model, fuel type, year
+class Vehicle {
+String make, model, fuelType;
+int year;
+// constructor: sets make, model, year, fuel type
+Vehicle(String mk, String md, int y, String f) {
+make = mk;
+model = md;
+year = y;
+fuelType = f;
+}
+// gives fuel the efficiency and returns it
+double fuelEfficiency(double km, double litres) {
+return km / litres;
+}
+// returns the distance travelled
+double distanceTravelled(double speed, double hours) {
+return speed * hours;
+}
+// returns the max speed
+int maxSpeed() {
+return 100;
+}
+}
+// truck extends vehicle, so it gets everything vehicle has
+class Truck extends Vehicle {
+// constructor: runs when the object is made
+Truck(String mk, String md, int y, String f) {
+super(mk, md, y, f);
+}
+// overrides maxSpeed() of the parent, with its own version
+@Override int maxSpeed() {
+return 90;
+}
+}
+// car extends vehicle, so it gets everything vehicle has
+class Car extends Vehicle {
+// constructor: runs when the object is made
+Car(String mk, String md, int y, String f) {
+super(mk, md, y, f);
+}
+// overrides maxSpeed() of the parent, with its own version
+@Override int maxSpeed() {
+return 180;
+}
+}
+// motorcycle extends vehicle, so it gets everything vehicle has
+class Motorcycle extends Vehicle {
+// constructor: runs when the object is made
+Motorcycle(String mk, String md, int y, String f) {
+super(mk, md, y, f);
+}
+// overrides maxSpeed() of the parent, with its own version
+@Override int maxSpeed() {
+return 150;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class vehiclehierarchy {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Vehicle[] v = {new Truck("Tata", "Prima", 2022, "Diesel"), new Car("Honda", "City", 2023, "Petrol"), new Motorcycle("Yamaha", "R15", 2024, "Petrol")};
+// take each x from v one by one
+for (Vehicle x : v)
+System.out.println(x.make + " " + x.model + " (" + x.year + ", " + x.fuelType + ") max speed " + x.maxSpeed() + " km/h, efficiency " + x.fuelEfficiency(300, 20) + " km/l, distance in 2h at 60 km/h = " + x.distanceTravelled(60, 2) + " km");
+}
+}`,
+"vehiclehierarchy.java", "Tata Prima (2022, Diesel) max speed 90 km/h, efficiency 15.0 km/l, distance in 2h at 60 km/h = 120.0 km\nHonda City (2023, Petrol) max speed 180 km/h, efficiency 15.0 km/l, distance in 2h at 60 km/h = 120.0 km\nYamaha R15 (2024, Petrol) max speed 150 km/h, efficiency 15.0 km/l, distance in 2h at 60 km/h = 120.0 km"],
+    [10, "Employee class hierarchy: Manager, Developer, Programmer with name, address, salary, job title; bonuses, performance reports, project management",
+`// class employee: keeps name, address, job title, salary
+class Employee {
+String name, address, jobTitle;
+double salary;
+// constructor: sets name, address, salary, job title
+Employee(String n, String a, double s, String j) {
+name = n;
+address = a;
+salary = s;
+jobTitle = j;
+}
+// returns the bonus
+double bonus() {
+return salary * 0.05;
+}
+// returns the report
+String report() {
+return name+" ("+jobTitle+") - satisfactory";
+}
+}
+// manager extends employee, so it gets everything employee has
+class Manager extends Employee {
+java.util.List<String> projects = new java.util.ArrayList<>();
+// constructor: runs when the object is made
+Manager(String n, String a, double s) {
+super(n, a, s, "Manager");
+}
+// overrides bonus() of the parent, with its own version
+@Override double bonus() {
+return salary * 0.15;
+}
+// adds the project
+void addProject(String p) {
+projects.add(p);
+}
+}
+// developer extends employee, so it gets everything employee has
+class Developer extends Employee {
+// constructor: runs when the object is made
+Developer(String n, String a, double s) {
+super(n, a, s, "Developer");
+}
+// overrides bonus() of the parent, with its own version
+@Override double bonus() {
+return salary * 0.10;
+}
+}
+// programmer extends employee, so it gets everything employee has
+class Programmer extends Employee {
+// constructor: runs when the object is made
+Programmer(String n, String a, double s) {
+super(n, a, s, "Programmer");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class employeehierarchy {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Manager m = new Manager("Asha", "Delhi", 90000);
+m.addProject("Website");
+Developer d = new Developer("Ravi", "Pune", 60000);
+Programmer p = new Programmer("Neha", "Noida", 50000);
+Employee[] e = {m, d, p};
+// take each x from e one by one
+for (Employee x : e) System.out.println(x.report() + " | bonus = " + x.bonus());
+System.out.println("Manager projects: " + m.projects);
+}
+}`,
+"employeehierarchy.java", "Asha (Manager) - satisfactory | bonus = 13500.0\nRavi (Developer) - satisfactory | bonus = 6000.0\nNeha (Programmer) - satisfactory | bonus = 2500.0\nManager projects: [Website]"],
+    [11, "Create a program showing an example of super keyword",
+`// class a: keeps x
+class A {
+int x = 10;
+// constructor: runs when the object is made
+A() {
+System.out.println("A()");
+}
+}
+// b extends a, so it gets everything a has
+class B extends A {
+int x = 20;
+// constructor: runs when the object is made
+B() {
+super();
+System.out.println(x+" "+super.x);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class superkeyword {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new B();
+}
+}`,
+"superkeyword.java", "A()\n20 10"],
+    [12, "Create a program showing an example of super function",
+`// class parent
+class Parent {
+// shows
+void show() {
+System.out.println("Parent show()");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class superfunction extends Parent {
+// shows
+void show() {
+super.show();
+System.out.println("superfunction show()");
+}
+
+// execution begins in main()
+
+public static void main(String[] a) {
+new superfunction().show();
+}
+}`,
+"ExampleSuperFunction.java", "Parent show()\nChild show()"],
+    [13, "Create a program showing an example of method overriding",
+`// class bank
+class Bank {
+// returns the rate
+double rate() {
+return 5.0;
+}
+}
+// sbi extends bank, so it gets everything bank has
+class SBI extends Bank {
+// overrides rate() of the parent, with its own version
+@Override double rate() {
+return 6.5;
+}
+}
+// hdfc extends bank, so it gets everything bank has
+class HDFC extends Bank {
+// overrides rate() of the parent, with its own version
+@Override double rate() {
+return 7.0;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class overriding {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+System.out.println(new SBI().rate()+" "+new HDFC().rate());
+}
+}`,
+"overriding.java", "6.5 7.0"],
+    [14, "Create a program showing an example of dynamic method dispatch",
+`// class a
+class A {
+// shows
+void show() {
+System.out.println("A");
+}
+}
+// b extends a, so it gets everything a has
+class B extends A {
+// shows
+void show() {
+System.out.println("B");
+}
+}
+// c extends a, so it gets everything a has
+class C extends A {
+// shows
+void show() {
+System.out.println("C");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class dispatch {
+
+// execution begins in main()
+
+public static void main(String[] x) {
+A ref = new A();
+ref.show();  // a
+ref = new B();
+ref.show();  // b
+ref = new C();
+ref.show();  // c
+}
+}`,
+"dispatch.java", "A\nB\nC"],
+    [16, "Abstract class Shape with calculateArea() and calculatePerimeter(); subclasses Circle and Triangle.",
+`// abstract class shape: subclasses must complete its methods
+abstract class Shape {
+// no body here, each subclass writes calculateArea()
+abstract double calculateArea();
+// no body here, each subclass writes calculatePerimeter()
+abstract double calculatePerimeter();
+}
+// circle extends shape, so it gets everything shape has
+class Circle extends Shape {
+double r = 5;
+// calculates the area and returns it
+double calculateArea() {
+return Math.PI * r * r;
+}
+// calculates the perimeter and returns it
+double calculatePerimeter() {
+return 2 * Math.PI * r;
+}
+}
+// triangle extends shape, so it gets everything shape has
+class Triangle extends Shape {
+double a = 3, b = 4, c = 5;
+// calculates the area and returns it
+double calculateArea() {
+double s = (a + b + c) / 2;
+return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+}
+// calculates the perimeter and returns it
+double calculatePerimeter() {
+return a + b + c;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractshape {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Shape[] s = {new Circle(), new Triangle()};
+// take each x from s one by one
+for (Shape x : s)
+System.out.println(x.getClass().getSimpleName() + ": area=" + x.calculateArea() + ", perimeter=" + x.calculatePerimeter());
+}
+}`,
+"abstractshape.java", "Circle: area=78.53981633974483, perimeter=31.41592653589793\nTriangle: area=6.0, perimeter=12.0"],
+    [17, "Abstract class BankAccount with deposit() and withdraw(); SavingsAccount and CurrentAccount implement them",
+`// abstract class bankaccount: subclasses must complete its methods
+abstract class BankAccount {
+double bal;
+// no body here, each subclass writes deposit()
+abstract void deposit(double a);
+// no body here, each subclass writes withdraw()
+abstract void withdraw(double a);
+}
+// savingsaccount extends bankaccount, so it gets everything bankaccount has
+class SavingsAccount extends BankAccount {
+// deposits
+void deposit(double a) {
+bal += a;
+}
+// withdraws
+void withdraw(double a) {
+if (a <= bal) bal -= a;
+}
+}
+// currentaccount extends bankaccount, so it gets everything bankaccount has
+class CurrentAccount extends BankAccount {
+// deposits
+void deposit(double a) {
+bal += a;
+}
+// withdraws
+void withdraw(double a) {
+if (a <= bal + 2000) bal -= a;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractbank {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+BankAccount s = new SavingsAccount(), c = new CurrentAccount();
+s.deposit(1000);
+s.withdraw(400);
+c.deposit(500);
+c.withdraw(1500);
+System.out.println("Savings balance = " + s.bal);
+System.out.println("Current balance = " + c.bal);
+}
+}`,
+"abstractbank.java", "Savings balance = 600.0\nCurrent balance = -1000.0"],
+    [18, "Abstract class Animal with eat() and sleep(); Lion, Tiger, Deer",
+`// abstract class animal: subclasses must complete its methods
+abstract class Animal {
+// no body here, each subclass writes eat()
+abstract void eat();
+// no body here, each subclass writes sleep()
+abstract void sleep();
+}
+// lion extends animal, so it gets everything animal has
+class Lion extends Animal {
+// eats
+void eat() {
+System.out.println("Lion eats meat");
+}
+// sleeps
+void sleep() {
+System.out.println("Lion sleeps 20 hours");
+}
+}
+// tiger extends animal, so it gets everything animal has
+class Tiger extends Animal {
+// eats
+void eat() {
+System.out.println("Tiger hunts and eats meat");
+}
+// sleeps
+void sleep() {
+System.out.println("Tiger sleeps in daytime");
+}
+}
+// deer extends animal, so it gets everything animal has
+class Deer extends Animal {
+// eats
+void eat() {
+System.out.println("Deer eats grass");
+}
+// sleeps
+void sleep() {
+System.out.println("Deer sleeps lightly");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractanimal {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Animal[] a = {new Lion(), new Tiger(), new Deer()};
+// take each x from a one by one
+for (Animal x : a) {
+x.eat();
+x.sleep();
+}
+}
+}`,
+"abstractanimal.java", "Lion eats meat\nLion sleeps 20 hours\nTiger hunts and eats meat\nTiger sleeps in daytime\nDeer eats grass\nDeer sleeps lightly"],
+    [19, "Abstract class Employee with calculateSalary() and displayInfo(); Manager and Programmer",
+`// abstract class employee: subclasses must complete its methods
+abstract class Employee {
+String name;
+// constructor: sets name
+Employee(String n) {
+name = n;
+}
+// no body here, each subclass writes calculateSalary()
+abstract double calculateSalary();
+// no body here, each subclass writes displayInfo()
+abstract void displayInfo();
+}
+// manager extends employee, so it gets everything employee has
+class Manager extends Employee {
+// constructor: runs when the object is made
+Manager(String n) {
+super(n);
+}
+// calculates the salary and returns it
+double calculateSalary() {
+return 60000 + 10000;
+}
+// displays the info
+void displayInfo() {
+System.out.println(name+" Manager "+calculateSalary());
+}
+}
+// programmer extends employee, so it gets everything employee has
+class Programmer extends Employee {
+// constructor: runs when the object is made
+Programmer(String n) {
+super(n);
+}
+// calculates the salary and returns it
+double calculateSalary() {
+return 40000 + 5000;
+}
+// displays the info
+void displayInfo() {
+System.out.println(name+" Programmer "+calculateSalary());
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractemployee {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Employee[] e = {new Manager("Asha"), new Programmer("Ravi")};
+// take each x from e one by one
+for (Employee x : e) x.displayInfo();
+}
+}`,
+"abstractemployee.java", "Asha Manager 70000.0\nRavi Programmer 45000.0"],
+    [20, "Abstract class Shape3D with calculateVolume() and calculateSurfaceArea(); Sphere and Cube",
+`// abstract class shape3d: subclasses must complete its methods
+abstract class Shape3D {
+// no body here, each subclass writes calculateVolume()
+abstract double calculateVolume();
+// no body here, each subclass writes calculateSurfaceArea()
+abstract double calculateSurfaceArea();
+}
+// sphere extends shape3d, so it gets everything shape3d has
+class Sphere extends Shape3D {
+double r = 3;
+// calculates the volume and returns it
+double calculateVolume() {
+return 4.0 / 3 * Math.PI * r * r * r;
+}
+// calculates the surface area and returns it
+double calculateSurfaceArea() {
+return 4 * Math.PI * r * r;
+}
+}
+// cube extends shape3d, so it gets everything shape3d has
+class Cube extends Shape3D {
+double s = 4;
+// calculates the volume and returns it
+double calculateVolume() {
+return s * s * s;
+}
+// calculates the surface area and returns it
+double calculateSurfaceArea() {
+return 6 * s * s;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractshape3d {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Shape3D[] s = {new Sphere(), new Cube()};
+// take each x from s one by one
+for (Shape3D x : s)
+System.out.println(x.getClass().getSimpleName() + ": volume=" + x.calculateVolume() + ", surface area=" + x.calculateSurfaceArea());
+}
+}`,
+"abstractshape3d.java", "Sphere: volume=113.09733552923255, surface area=113.09733552923255\nCube: volume=64.0, surface area=96.0"],
+    [21, "Abstract class Vehicle with startEngine() and stopEngine(); Car and Motorcycle",
+`// abstract class vehicle: subclasses must complete its methods
+abstract class Vehicle {
+// no body here, each subclass writes startEngine()
+abstract void startEngine();
+// no body here, each subclass writes stopEngine()
+abstract void stopEngine();
+}
+// car extends vehicle, so it gets everything vehicle has
+class Car extends Vehicle {
+// starts the engine
+void startEngine() {
+System.out.println("Car engine started with key");
+}
+// stops the engine
+void stopEngine() {
+System.out.println("Car engine stopped");
+}
+}
+// motorcycle extends vehicle, so it gets everything vehicle has
+class Motorcycle extends Vehicle {
+// starts the engine
+void startEngine() {
+System.out.println("Motorcycle engine started with kick");
+}
+// stops the engine
+void stopEngine() {
+System.out.println("Motorcycle engine stopped");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractvehicle {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Vehicle[] v = {new Car(), new Motorcycle()};
+// take each x from v one by one
+for (Vehicle x : v) {
+x.startEngine();
+x.stopEngine();
+}
+}
+}`,
+"abstractvehicle.java", "Car engine started with key\nCar engine stopped\nMotorcycle engine started with kick\nMotorcycle engine stopped"],
+    [22, "Abstract class Person with eat() and exercise(); Athlete and LazyPerson",
+`// abstract class person: subclasses must complete its methods
+abstract class Person {
+// no body here, each subclass writes eat()
+abstract void eat();
+// no body here, each subclass writes exercise()
+abstract void exercise();
+}
+// athlete extends person, so it gets everything person has
+class Athlete extends Person {
+// eats
+void eat() {
+System.out.println("Athlete eats a high-protein diet");
+}
+// does the exercise work
+void exercise() {
+System.out.println("Athlete trains daily");
+}
+}
+// lazyperson extends person, so it gets everything person has
+class LazyPerson extends Person {
+// eats
+void eat() {
+System.out.println("Lazy person eats junk food");
+}
+// does the exercise work
+void exercise() {
+System.out.println("Lazy person never exercises");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class abstractperson {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Person[] p = {new Athlete(), new LazyPerson()};
+// take each x from p one by one
+for (Person x : p) {
+x.eat();
+x.exercise();
+}
+}
+}`,
+"abstractperson.java", "Athlete eats a high-protein diet\nAthlete trains daily\nLazy person eats junk food\nLazy person never exercises"],
+    [23, "Abstract class Instrument with play() and tune(); Glockenspiel and Violin",
+`// abstract class instrument: subclasses must complete its methods
+abstract class Instrument {
+// no body here, each subclass writes play()
+abstract void play();
+// no body here, each subclass writes tune()
+abstract void tune();
+}
+// glockenspiel extends instrument, so it gets everything instrument has
+class Glockenspiel extends Instrument {
+// plays
+void play() {
+System.out.println("Glockenspiel plays by striking bars");
+}
+// tunes
+void tune() {
+System.out.println("Glockenspiel bars are pre-tuned");
+}
+}
+// violin extends instrument, so it gets everything instrument has
+class Violin extends Instrument {
+// plays
+void play() {
+System.out.println("Violin plays with a bow");
+}
+// tunes
+void tune() {
+System.out.println("Violin tuned with pegs");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class instruments {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Instrument[] i = {new Glockenspiel(), new Violin()};
+// take each x from i one by one
+for (Instrument x : i) {
+x.tune();
+x.play();
+}
+}
+}`,
+"instruments.java", "Glockenspiel bars are pre-tuned\nGlockenspiel plays by striking bars\nViolin tuned with pegs\nViolin plays with a bow"],
+    [24, "Abstract class Shape2D with draw() and resize(); Rectangle and Circle",
+`// abstract class shape2d: subclasses must complete its methods
+abstract class Shape2D {
+// no body here, each subclass writes draw()
+abstract void draw();
+// no body here, each subclass writes resize()
+abstract void resize(double f);
+}
+// rectangle extends shape2d, so it gets everything shape2d has
+class Rectangle extends Shape2D {
+double w = 4, h = 2;
+// draws
+void draw() {
+System.out.println("Rectangle "+w+"x"+h);
+}
+// resizes
+void resize(double f) {
+w *= f;
+h *= f;
+}
+}
+// circle extends shape2d, so it gets everything shape2d has
+class Circle extends Shape2D {
+double r = 3;
+// draws
+void draw() {
+System.out.println("Circle r="+r);
+}
+// resizes
+void resize(double f) {
+r *= f;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class shape2ddemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Shape2D[] s = {new Rectangle(), new Circle()};
+// take each x from s one by one
+for (Shape2D x : s) {
+x.draw();
+x.resize(2);
+x.draw();
+}
+}
+}`,
+"shape2ddemo.java", "Rectangle 4.0x2.0\nRectangle 8.0x4.0\nCircle r=3.0\nCircle r=6.0"],
+    [25, "Abstract class Bird with fly() and makeSound(); Eagle and Hawk",
+`// abstract class bird: subclasses must complete its methods
+abstract class Bird {
+// no body here, each subclass writes fly()
+abstract void fly();
+// no body here, each subclass writes makeSound()
+abstract void makeSound();
+}
+// eagle extends bird, so it gets everything bird has
+class Eagle extends Bird {
+// flies
+void fly() {
+System.out.println("Eagle soars high");
+}
+// makes the sound
+void makeSound() {
+System.out.println("Eagle screeches");
+}
+}
+// hawk extends bird, so it gets everything bird has
+class Hawk extends Bird {
+// flies
+void fly() {
+System.out.println("Hawk glides and dives");
+}
+// makes the sound
+void makeSound() {
+System.out.println("Hawk screams");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class birds {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Bird[] b = {new Eagle(), new Hawk()};
+// take each x from b one by one
+for (Bird x : b) {
+x.fly();
+x.makeSound();
+}
+}
+}`,
+"birds.java", "Eagle soars high\nEagle screeches\nHawk glides and dives\nHawk screams"],
+    [26, "Abstract class GeometricShape with area() and perimeter(); Triangle and Square",
+`// abstract class geometricshape: subclasses must complete its methods
+abstract class GeometricShape {
+// no body here, each subclass writes area()
+abstract double area();
+// no body here, each subclass writes perimeter()
+abstract double perimeter();
+}
+// triangle extends geometricshape, so it gets everything geometricshape has
+class Triangle extends GeometricShape {
+double a = 3, b = 4, c = 5;
+// returns the area
+double area() {
+double s = (a + b + c) / 2;
+return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+}
+// returns the perimeter
+double perimeter() {
+return a + b + c;
+}
+}
+// square extends geometricshape, so it gets everything geometricshape has
+class Square extends GeometricShape {
+double s = 4;
+// returns the area
+double area() {
+return s * s;
+}
+// returns the perimeter
+double perimeter() {
+return 4 * s;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class geometricshapedemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+GeometricShape[] g = {new Triangle(), new Square()};
+// take each x from g one by one
+for (GeometricShape x : g)
+System.out.println(x.getClass().getSimpleName() + ": area=" + x.area() + ", perimeter=" + x.perimeter());
+}
+}`,
+"geometricshapedemo.java", "Triangle: area=6.0, perimeter=12.0\nSquare: area=16.0, perimeter=16.0"]
+  ]
+  },
+  {
+  name: "Input/Output",
+  questions: [
+    [1, "Enter the character from user using InputStreamReader",
+`import java.io.*;
+// program to enter the character from user using inputstreamreader
+class readchar {
+
+// execution begins in main()
+
+public static void main(String[] a) throws IOException {
+InputStreamReader r = new InputStreamReader(System.in);
+System.out.print("Enter a character: ");
+char c = (char) r.read();
+System.out.println("You entered: "+c);
+}
+}`,
+"readchar.java", "Enter a character: 5\nYou entered: 5"],
+    [2, "Enter the string from user using BufferedReader",
+`import java.io.*;
+// program to enter the string from user using bufferedreader
+class readstring {
+
+// execution begins in main()
+
+public static void main(String[] a) throws IOException {
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+System.out.print("Enter a string: ");
+String s = br.readLine();
+System.out.println("You entered: "+s);
+}
+}`,
+"readstring.java", "Enter a string: 5\nYou entered: 5"],
+    [3, "Enter the integer from user using Scanner class",
+`import java.util.Scanner;
+// program to enter the integer from user using scanner class
+class readint {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+Scanner sc = new Scanner(System.in);
+System.out.print("Enter an integer: ");
+int n = sc.nextInt();
+System.out.println("You entered: "+n);
+}
+}`,
+"readint.java", "Enter an integer: 5\nYou entered: 5"],
+    [4, "Enter the float from user using Scanner class",
+`import java.util.Scanner;
+// program to enter the float from user using scanner class
+class readfloat {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);  // import java.util.scanner;
+float f = sc.nextFloat();
+System.out.println("Float: "+f);
+}
+}`,
+"readfloat.java", "5\nFloat: 5.0"],
+    [5, "Enter the double from user using Scanner class",
+`import java.util.Scanner;
+// program to enter the double from user using scanner class
+class readdouble {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+double d = sc.nextDouble();
+System.out.println("Double: "+d);
+}
+}`,
+"readdouble.java", "5\nDouble: 5.0"],
+    [6, "Enter the boolean from user using Scanner class",
+`import java.util.Scanner;
+// program to enter the boolean from user using scanner class
+class readboolean {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+boolean b = sc.nextBoolean();  // input: true or false
+System.out.println("Boolean: "+b);
+}
+}`,
+"readboolean.java", "true\nBoolean: true"],
+    [7, "Enter the short integer from user using Scanner class",
+`import java.util.Scanner;
+// program to enter the short integer from user using scanner class
+class readshort {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+short s = sc.nextShort();
+System.out.println("Short: "+s);
+}
+}`,
+"readshort.java", "5\nShort: 5"],
+    [8, "Enter the long integer from user using Scanner class",
+`import java.util.Scanner;
+// program to enter the long integer from user using scanner class
+class readlong {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+long l = sc.nextLong();
+System.out.println("Long: "+l);
+}
+}`,
+"readlong.java", "5\nLong: 5"],
+    [9, "Get all characters from the file and display on the screen",
+`import java.io.*;
+// program to get all characters from the file and display on the screen
+class showfile {
+
+// execution begins in main()
+
+public static void main(String[] a) throws IOException {
+FileReader fr = new FileReader("data.txt");
+int ch;
+while ((ch = fr.read()) != -1) System.out.print((char) ch);
+fr.close();
+}
+}`,
+"showfile.java", "Java is fun\nJava is powerful\nLearning Java is great"],
+    [10, "Get all characters from the file, count number of lines, words, characters and display on the screen",
+`import java.io.*;
+// program to get all characters from the file, count number of lines, words, characters and display on the
+class filecount {
+
+// execution begins in main()
+
+public static void main(String[] a) throws IOException {
+BufferedReader br = new BufferedReader(new FileReader("data.txt"));
+int lines = 0, words = 0, chars = 0;
+String line;
+while ((line = br.readLine()) != null) {
+lines++;
+chars += line.length();
+if (!line.trim().isEmpty()) words += line.trim().split("\\s+").length;
+}
+br.close();
+System.out.println("Lines="+lines+" Words="+words+" Characters="+chars);
+}
+}`,
+"filecount.java", "Lines=3 Words=10 Characters=49"]
+  ]
+  },
+  {
+  name: "Exception Handling",
+  questions: [
+    [1, "Write a Java program that throws an exception and catch it using a try-catch block.",
+`// program to throws an exception and catch it using a try-catch block
+class trycatch {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+// throw an exception
+throw new Exception("Custom exception");
+}
+catch (Exception e) {
+System.out.println("Caught: "+e.getMessage());
+}
+}
+}`,
+"trycatch.java", "Caught: Custom exception"],
+    [2, "Create a method that takes an integer and throws an exception if the number is odd.",
+`// program to create a method that takes an integer and throws an exception if the number is odd
+class oddexception {
+// method to takes an integer and throws an exception if the number is odd
+static void check(int n) throws Exception {
+if (n % 2 != 0) throw new Exception(n+" is odd");
+System.out.println(n+" is even");
+}
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+check(4);
+check(7);
+}
+catch (Exception e) {
+System.out.println(e.getMessage());
+}
+}
+}`,
+"oddexception.java", "4 is even\n7 is odd"],
+    [3, "Create a method that reads a file and throws an exception if the file is not found",
+`import java.io.*;
+// program to create a method that reads a file and throws an exception if the file is not found
+class filenotfound {
+// method to reads a file and throws an exception if the file is not found
+static void read(String n) throws FileNotFoundException {
+new FileReader(n);
+}
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+read("x.txt");
+}
+catch (FileNotFoundException e) {
+System.out.println("File not found");
+}
+}
+}`,
+"filenotfound.java", "File not found"],
+    [4, "Read a list of numbers from a file and throw an exception if any of the numbers are positive",
+`import java.io.*;
+import java.util.Scanner;
+// program to read a list of numbers from a file and throw an exception if any of the numbers are positive
+class positivefile {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+try (Scanner sc = new Scanner(new File("numbers.txt"))) {
+// keep going while sc.hasNextInt()
+while (sc.hasNextInt()) {
+int n = sc.nextInt();
+if (n > 0) throw new Exception("Positive number found: "+n);
+}
+} catch (Exception e) { // runs if a  error happens
+System.out.println(e.getMessage());
+}
+}
+}`,
+"positivefile.java", "Positive number found: 7"],
+    [5, "Read a file and throw an exception if the file is empty",
+`import java.io.*;
+// program to read a file and throw an exception if the file is empty
+class emptyfile {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+File f = new File("data.txt");
+if (f.length() == 0) throw new Exception("File is empty");
+System.out.println("File has content");
+} catch (Exception e) { // runs if a  error happens
+System.out.println(e.getMessage());
+}
+}
+}`,
+"emptyfile.java", "File has content"],
+    [6, "Read a list of integers from the user and throw an exception if any numbers are duplicates",
+`import java.util.*;
+// program to read a list of integers from the user and throw an exception if any numbers are duplicates
+class duplicateinput {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+Scanner sc = new Scanner(System.in);
+Set<Integer> seen = new HashSet<>();
+// code that may cause an error
+try {
+// loop i from 0 to 4
+for (int i = 0; i < 5; i++) {
+int n = sc.nextInt();
+if (!seen.add(n)) throw new Exception("Duplicate: "+n);
+}
+} catch (Exception e) { // runs if a  error happens
+System.out.println(e.getMessage());
+}
+}
+}`,
+"duplicateinput.java", "4\n7\n2\n4\nDuplicate: 4"],
+    [7, "Create a method that takes a string and throws an exception if the string does not contain vowels",
+`// program to create a method that takes a string and throws an exception if the string does not contain
+class novowels {
+// method to takes a string and throws an exception if the string does not contain vowels
+static void check(String s) throws Exception {
+if (!s.toLowerCase().matches(".*[aeiou].*"))
+// throw an exception
+throw new Exception("No vowels in: "+s);
+System.out.println("Contains vowels");
+}
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+check("java");
+check("rhythm");
+}
+catch (Exception e) {
+System.out.println(e.getMessage());
+}
+}
+}`,
+"novowels.java", "Contains vowels\nNo vowels in: rhythm"],
+    [11, "Write a Java program to show an example of throws keyword",
+`// program to show an example of throws keyword
+class throwsdemo {
+// does the divide work
+static void divide(int a, int b) throws ArithmeticException {
+System.out.println(a / b);
+}
+
+// execution begins in main()
+
+public static void main(String[] x) {
+// code that may cause an error
+try {
+divide(10, 0);
+}
+catch (ArithmeticException e) {
+System.out.println("Handled: "+e.getMessage());
+}
+}
+}`,
+"throwsdemo.java", "Handled: / by zero"],
+    [12, "Write a Java program to show an example of multiple catch",
+`// program to show an example of multiple catch
+class multicatch {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+int[] x = new int[3];
+x[5] = 10 / 0;
+} catch (ArithmeticException e) { // runs if an arithmetic error happens
+System.out.println("Arithmetic");
+} catch (ArrayIndexOutOfBoundsException e) { // runs if an array index out of bounds error happens
+System.out.println("Array index");
+} catch (Exception e) { // runs if a  error happens
+System.out.println("Other");
+}
+}
+}`,
+"multicatch.java", "Arithmetic"],
+    [13, "Write a Java program to show an example of nested try block",
+`// program to show an example of nested try block
+class nestedtry {
+
+// execution begins in main()
+
+public static void main(String[] a) {
+// code that may cause an error
+try {
+try {
+int x = 10 / 0;
+}
+catch (ArithmeticException e) {
+System.out.println("Inner: arithmetic");
+}
+String s = null;
+s.length();
+} catch (NullPointerException e) { // runs if a null pointer error happens
+System.out.println("Outer: null pointer");
+}
+}
+}`,
+"nestedtry.java", "Inner: arithmetic\nOuter: null pointer"]
+  ]
+  },
+  {
+  name: "Object Oriented Programming",
+  questions: [
+    [1, "Create class Person with name and age; make two objects using the constructor and print them.",
+`// class person: keeps name, age
+class Person {
+String name;
+int age;
+// constructor: sets name, age
+Person(String n, int a) {
+name = n;
+age = a;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class personobjects {
+
+// execution begins in main()
+
+public static void main(String[] x) {
+Person p1 = new Person("Ravi", 20), p2 = new Person("Anu", 22);
+System.out.println(p1.name+" "+p1.age);
+System.out.println(p2.name+" "+p2.age);
+}
+}`,
+"personobjects.java", "Ravi 20\nAnu 22"],
+    [2, "Class Dog with name and breed; two objects, modify using setters and print updated values",
+`// program to test the classes above by making objects and calling their methods
+class dogsetters {
+String name, breed;
+// constructor: sets name, breed
+dogsetters(String n, String b) {
+name = n;
+breed = b;
+}
+// sets the name
+void setName(String n) {
+name = n;
+}
+// sets the breed
+void setBreed(String b) {
+breed = b;
+}
+
+// execution begins in main()
+
+public static void main(String[] a) {
+dogsetters d1 = new dogsetters("Tommy", "Labrador"), d2 = new dogsetters("Rocky", "Pug");
+d1.setName("Max");
+d2.setBreed("Beagle");
+System.out.println(d1.name+" "+d1.breed+" | "+d2.name+" "+d2.breed);
+}
+}`,
+"ClassDogNameBreed.java", "Max Labrador | Rocky Beagle"],
+    [3, "Create class Rectangle with width and height. Calculate area and perimeter.",
+`// class rectangle: keeps w, h
+class Rectangle {
+double w, h;
+// constructor: sets w, h
+Rectangle(double w, double h) {
+this.w = w;
+this.h = h;
+}
+// returns the area
+double area() {
+return w * h;
+}
+// returns the perimeter
+double perimeter() {
+return 2 * (w + h);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class rectanglecalc {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Rectangle r = new Rectangle(5, 3);
+System.out.println("Area = " + r.area());
+System.out.println("Perimeter = " + r.perimeter());
+}
+}`,
+"rectanglecalc.java", "Area = 15.0\nPerimeter = 16.0"],
+    [4, "Class Circle with radius (access and modify); calculate area and circumference",
+`// class circle: keeps radius
+class Circle {
+double radius;
+// constructor: sets radius
+Circle(double r) {
+radius = r;
+}
+// sets the radius
+void setRadius(double r) {
+radius = r;
+}
+// returns the radius
+double getRadius() {
+return radius;
+}
+// returns the area
+double area() {
+return Math.PI * radius * radius;
+}
+// returns the circumference
+double circumference() {
+return 2 * Math.PI * radius;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class circlecalc {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Circle c = new Circle(5);
+System.out.println("Radius = " + c.getRadius());
+System.out.println("Area = " + c.area());
+System.out.println("Circumference = " + c.circumference());
+c.setRadius(10);
+System.out.println("New area = " + c.area());
+}
+}`,
+"circlecalc.java", "Radius = 5.0\nArea = 78.53981633974483\nCircumference = 31.41592653589793\nNew area = 314.1592653589793"],
+    [5, "Class Book with title, author, ISBN and methods to add and remove books from a collection",
+`// class book: keeps title, author, isbn
+class Book {
+String title, author, isbn;
+// constructor: sets title, author, isbn
+Book(String t, String a, String i) {
+title = t;
+author = a;
+isbn = i;
+}
+}
+// class bookcollection
+class BookCollection {
+java.util.List<Book> books = new java.util.ArrayList<>();
+// adds
+void add(Book b) {
+books.add(b);
+}
+// removes
+void remove(String isbn) {
+books.removeIf(b -> b.isbn.equals(isbn));
+}
+}
+// program to test the classes above by making objects and calling their methods
+class bookdemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+BookCollection bc = new BookCollection();
+bc.add(new Book("Java Basics", "James", "111"));
+bc.add(new Book("Data Structures", "Mark", "222"));
+System.out.println("Books: " + bc.books.size());
+bc.remove("111");
+System.out.println("After removing ISBN 111: " + bc.books.size() + " book left (" + bc.books.get(0).title + ")");
+}
+}`,
+"bookdemo.java", "Books: 2\nAfter removing ISBN 111: 1 book left (Data Structures)"],
+    [6, "Class Employee with name, job title, salary; methods to calculate and update salary",
+`// class employee: keeps name, job title, salary
+class Employee {
+String name, jobTitle;
+double salary;
+// constructor: sets name, job title, salary
+Employee(String n, String j, double s) {
+name = n;
+jobTitle = j;
+salary = s;
+}
+// calculates the annual salary and returns it
+double calculateAnnualSalary() {
+return salary * 12;
+}
+// updates the salary
+void updateSalary(double newSalary) {
+salary = newSalary;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class employeesalary {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Employee e = new Employee("Ravi", "Developer", 30000);
+System.out.println("Annual salary = " + e.calculateAnnualSalary());
+e.updateSalary(35000);
+System.out.println("New monthly salary = " + e.salary);
+}
+}`,
+"employeesalary.java", "Annual salary = 360000.0\nNew monthly salary = 35000.0"],
+    [7, "Class Bank with a collection of accounts and methods to add/remove accounts, deposit and withdraw; class Account for customer details",
+`// class account: keeps acc no, holder, balance
+class Account {
+int accNo;
+String holder;
+double balance;
+// constructor: sets acc no, holder, balance
+Account(int n, String h, double b) {
+accNo = n;
+holder = h;
+balance = b;
+}
+}
+// class bank
+class Bank {
+java.util.Map<Integer, Account> accounts = new java.util.HashMap<>();
+// adds the account
+void addAccount(Account a) {
+accounts.put(a.accNo, a);
+}
+// removes the account
+void removeAccount(int n) {
+accounts.remove(n);
+}
+// deposits
+void deposit(int n, double amt) {
+accounts.get(n).balance += amt;
+}
+// withdraws
+void withdraw(int n, double amt) {
+Account a = accounts.get(n);
+if (a.balance >= amt) a.balance -= amt;
+else System.out.println("Insufficient funds");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class bankaccounts {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Bank b = new Bank();
+b.addAccount(new Account(101, "Ravi", 5000));
+b.addAccount(new Account(102, "Anu", 3000));
+b.deposit(101, 2000);
+b.withdraw(102, 5000);
+b.withdraw(102, 1000);
+System.out.println("Ravi: " + b.accounts.get(101).balance);
+System.out.println("Anu: " + b.accounts.get(102).balance);
+b.removeAccount(102);
+System.out.println("Accounts left: " + b.accounts.size());
+}
+}`,
+"bankaccounts.java", "Insufficient funds\nRavi: 7000.0\nAnu: 2000.0\nAccounts left: 1"],
+    [8, "Class TrafficLight with color and duration; methods to change color and check for red or green",
+`// class trafficlight: keeps color, duration
+class TrafficLight {
+String color = "red";
+int duration = 30;
+// changes
+void change(String c, int d) {
+color = c;
+duration = d;
+}
+// returns true if it is red
+boolean isRed() {
+return color.equals("red");
+}
+// returns true if it is green
+boolean isGreen() {
+return color.equals("green");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class trafficlightdemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+TrafficLight t = new TrafficLight();
+System.out.println("Is red? " + t.isRed());
+t.change("green", 45);
+System.out.println("Is green? " + t.isGreen() + ", duration " + t.duration + " seconds");
+}
+}`,
+"trafficlightdemo.java", "Is red? true\nIs green? true, duration 45 seconds"],
+    [9, "Class Employee with name, salary and hire date; method to calculate years of service",
+`import java.time.*;
+// class employee: keeps name, salary, hire date
+class Employee {
+String name;
+double salary;
+LocalDate hireDate;
+// constructor: sets name, salary, hire date
+Employee(String n, double s, LocalDate h) {
+name = n;
+salary = s;
+hireDate = h;
+}
+// method to calculate years of service
+int yearsOfService() {
+return Period.between(hireDate, LocalDate.now()).getYears();
+}
+}
+// program to test the classes above by making objects and calling their methods
+class yearsofservice {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Employee e = new Employee("Ravi", 40000, java.time.LocalDate.of(2018, 6, 15));
+System.out.println(e.name + " has " + e.yearsOfService() + " years of service");
+}
+}`,
+"yearsofservice.java", "Ravi has 8 years of service"],
+    [10, "Class Student with name, grade and courses; methods to add and remove courses",
+`// class student: keeps name, grade
+class Student {
+String name, grade;
+java.util.List<String> courses = new java.util.ArrayList<>();
+// constructor: sets name, grade
+Student(String n, String g) {
+name = n;
+grade = g;
+}
+// adds the course
+void addCourse(String c) {
+courses.add(c);
+}
+// removes the course
+void removeCourse(String c) {
+courses.remove(c);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class studentcourses {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Student s = new Student("Khushboo", "A");
+s.addCourse("Java");
+s.addCourse("Maths");
+s.addCourse("Physics");
+System.out.println(s.name + " courses: " + s.courses);
+s.removeCourse("Maths");
+System.out.println("After removing Maths: " + s.courses);
+}
+}`,
+"studentcourses.java", "Khushboo courses: [Java, Maths, Physics]\nAfter removing Maths: [Java, Physics]"],
+    [11, "Class Library with a collection of books and methods to add and remove books",
+`// class library
+class Library {
+java.util.List<String> books = new java.util.ArrayList<>();
+// adds the book
+void addBook(String b) {
+books.add(b);
+}
+// removes the book
+void removeBook(String b) {
+books.remove(b);
+}
+// shows
+void show() {
+System.out.println(books);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class librarydemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Library l = new Library();
+l.addBook("Java Basics");
+l.addBook("Python Basics");
+l.show();
+l.removeBook("Python Basics");
+l.show();
+}
+}`,
+"librarydemo.java", "[Java Basics, Python Basics]\n[Java Basics]"],
+    [12, "Class Airplane with flight number, destination and departure time; methods to check status and delay",
+`// class airplane: keeps flight no, destination, departure time, delayed
+class Airplane {
+String flightNo, destination, departureTime;
+boolean delayed = false;
+// constructor: sets flight no, destination, departure time
+Airplane(String f, String d, String t) {
+flightNo = f;
+destination = d;
+departureTime = t;
+}
+// delays
+void delay(String newTime) {
+departureTime = newTime;
+delayed = true;
+}
+// returns the status
+String status() {
+return flightNo+" to "+destination+" at "+departureTime + (delayed?" (DELAYED)":" (On time)");
+}
+}
+// program to test the classes above by making objects and calling their methods
+class airplanedemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Airplane a = new Airplane("AI101", "Mumbai", "10:30 AM");
+System.out.println(a.status());
+a.delay("12:00 PM");
+System.out.println(a.status());
+}
+}`,
+"airplanedemo.java", "AI101 to Mumbai at 10:30 AM (On time)\nAI101 to Mumbai at 12:00 PM (DELAYED)"],
+    [13, "Class Inventory with a collection of products; add/remove products and check for low inventory",
+`// class inventory
+class Inventory {
+java.util.Map<String, Integer> stock = new java.util.HashMap<>();
+// adds the product
+void addProduct(String p, int q) {
+stock.merge(p, q, Integer::sum);
+}
+// removes the product
+void removeProduct(String p) {
+stock.remove(p);
+}
+// checks the low
+void checkLow(int limit) {
+stock.forEach((p, q) -> {
+if (q < limit) System.out.println("Low stock: "+p+" ("+q+")");
+});
+}
+}
+// program to test the classes above by making objects and calling their methods
+class inventorydemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Inventory i = new Inventory();
+i.addProduct("Pen", 50);
+i.addProduct("Notebook", 3);
+i.addProduct("Pencil", 2);
+i.checkLow(5);
+}
+}`,
+"inventorydemo.java", "Low stock: Notebook (3)\nLow stock: Pencil (2)"],
+    [14, "Class School with students, teachers and classes; add/remove students and teachers, create classes",
+`// class school
+class School {
+java.util.List<String> students = new java.util.ArrayList<>(), teachers = new java.util.ArrayList<>(), classes = new java.util.ArrayList<>();
+// adds the student
+void addStudent(String s) {
+students.add(s);
+}
+// removes the student
+void removeStudent(String s) {
+students.remove(s);
+}
+// adds the teacher
+void addTeacher(String t) {
+teachers.add(t);
+}
+// removes the teacher
+void removeTeacher(String t) {
+teachers.remove(t);
+}
+// does the create class work
+void createClass(String c) {
+classes.add(c);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class schooldemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+School s = new School();
+s.addStudent("Ravi");
+s.addStudent("Anu");
+s.addTeacher("Mr. Gupta");
+s.createClass("10A");
+System.out.println("Students: " + s.students + ", Teachers: " + s.teachers + ", Classes: " + s.classes);
+s.removeStudent("Ravi");
+System.out.println("Students now: " + s.students);
+}
+}`,
+"schooldemo.java", "Students: [Ravi, Anu], Teachers: [Mr. Gupta], Classes: [10A]\nStudents now: [Anu]"],
+    [15, "Class MusicLibrary with a collection of songs; add/remove songs and play a random song",
+`// class musiclibrary
+class MusicLibrary {
+java.util.List<String> songs = new java.util.ArrayList<>();
+// adds the song
+void addSong(String s) {
+songs.add(s);
+}
+// removes the song
+void removeSong(String s) {
+songs.remove(s);
+}
+// plays the random
+void playRandom() {
+if (songs.isEmpty()) return;
+System.out.println("Playing: "+songs.get(new java.util.Random().nextInt(songs.size())));
+}
+}
+// program to test the classes above by making objects and calling their methods
+class musiclibrarydemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+MusicLibrary m = new MusicLibrary();
+m.addSong("Song A");
+m.addSong("Song B");
+m.addSong("Song C");
+m.playRandom();
+}
+}`,
+"musiclibrarydemo.java", "Playing: Song C"],
+    [16, "Class Shape with abstract methods for area and perimeter; subclasses Rectangle, Circle, Triangle",
+`// abstract class shape: subclasses must complete its methods
+abstract class Shape {
+// no body here, each subclass writes area()
+abstract double area();
+// no body here, each subclass writes perimeter()
+abstract double perimeter();
+}
+// rectangle extends shape, so it gets everything shape has
+class Rectangle extends Shape {
+double l = 5, b = 3;
+// returns the area
+double area() {
+return l * b;
+}
+// returns the perimeter
+double perimeter() {
+return 2 * (l + b);
+}
+}
+// circle extends shape, so it gets everything shape has
+class Circle extends Shape {
+double r = 4;
+// returns the area
+double area() {
+return Math.PI * r * r;
+}
+// returns the perimeter
+double perimeter() {
+return 2 * Math.PI * r;
+}
+}
+// triangle extends shape, so it gets everything shape has
+class Triangle extends Shape {
+double a = 3, b = 4, c = 5;
+// returns the area
+double area() {
+double s = (a + b + c) / 2;
+return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+}
+// returns the perimeter
+double perimeter() {
+return a + b + c;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class shapeabstract {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Shape[] s = {new Rectangle(), new Circle(), new Triangle()};
+// take each x from s one by one
+for (Shape x : s)
+System.out.println(x.getClass().getSimpleName() + ": area=" + x.area() + ", perimeter=" + x.perimeter());
+}
+}`,
+"shapeabstract.java", "Rectangle: area=15.0, perimeter=16.0\nCircle: area=50.26548245743669, perimeter=25.132741228718345\nTriangle: area=6.0, perimeter=12.0"],
+    [17, "Class Movie with title, director, actors and reviews; methods for adding and retrieving reviews",
+`// class movie: keeps title, director
+class Movie {
+String title, director;
+java.util.List<String> actors = new java.util.ArrayList<>(), reviews = new java.util.ArrayList<>();
+// constructor: sets title, director
+Movie(String t, String d) {
+title = t;
+director = d;
+}
+// adds the review
+void addReview(String r) {
+reviews.add(r);
+}
+// returns the reviews
+java.util.List<String> getReviews() {
+return reviews;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class moviedemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Movie m = new Movie("Inception", "Christopher Nolan");
+m.addReview("Great story!");
+m.addReview("Mind-bending");
+System.out.println(m.title + " reviews: " + m.getReviews());
+}
+}`,
+"moviedemo.java", "Inception reviews: [Great story!, Mind-bending]"],
+    [18, "Class Restaurant with menu items, prices and ratings; add/remove items and calculate average rating",
+`// class restaurant
+class Restaurant {
+java.util.Map<String, Double> menu = new java.util.HashMap<>();
+java.util.List<Integer> ratings = new java.util.ArrayList<>();
+// adds the item
+void addItem(String i, double p) {
+menu.put(i, p);
+}
+// removes the item
+void removeItem(String i) {
+menu.remove(i);
+}
+// adds the rating
+void addRating(int r) {
+ratings.add(r);
+}
+// returns the average rating
+double averageRating() {
+double s = 0;
+// take each r from ratings one by one
+for (int r : ratings) s += r;
+return ratings.isEmpty()?0:s / ratings.size();
+}
+}
+// program to test the classes above by making objects and calling their methods
+class restaurantdemo {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Restaurant r = new Restaurant();
+r.addItem("Pizza", 250);
+r.addItem("Burger", 120);
+r.addRating(5);
+r.addRating(4);
+r.addRating(3);
+System.out.println("Menu: " + r.menu);
+System.out.println("Average rating = " + r.averageRating());
+r.removeItem("Burger");
+System.out.println("Menu now: " + r.menu);
+}
+}`,
+"restaurantdemo.java", "Menu: {Pizza=250.0, Burger=120.0}\nAverage rating = 4.0\nMenu now: {Pizza=250.0}"],
+    [20, "Create a class showing default, parameterized and copy constructors.",
+`// class box: keeps l
+class Box {
+int l;
+// constructor: sets default l
+Box() {
+l = 1;
+}                   // default
+// constructor: sets l
+Box(int l) {
+this.l = l;
+}         // parameterized
+// constructor: sets l
+Box(Box b) {
+l = b.l;
+}            // copy
+}
+// program to test the classes above by making objects and calling their methods
+class constructors {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Box a = new Box();
+Box b = new Box(5);
+Box c = new Box(b);
+System.out.println("Default box l = " + a.l);
+System.out.println("Parameterized box l = " + b.l);
+System.out.println("Copied box l = " + c.l);
+}
+}`,
+"constructors.java", "Default box l = 1\nParameterized box l = 5\nCopied box l = 5"],
+    [21, "Create a class showing an example of parameterized constructor",
+`// program to test the classes above by making objects and calling their methods
+class paramconstructor {
+String name;
+int age;
+// constructor: sets name, age
+paramconstructor(String n, int a) {
+name = n;
+age = a;
+}
+
+// execution begins in main()
+
+public static void main(String[] x) {
+paramconstructor s = new paramconstructor("Khushboo", 20);
+System.out.println(s.name+" "+s.age);
+}
+}`,
+"CreateClassShowingExample.java", "Khushboo 20"],
+    [22, "Create a class showing an example of copy constructor",
+`// program to test the classes above by making objects and calling their methods
+class copyconstructor {
+String name;
+int age;
+// constructor: sets name, age
+copyconstructor(String n, int a) {
+name = n;
+age = a;
+}
+// constructor: sets name, age
+copyconstructor(copyconstructor s) {
+name = s.name;
+age = s.age;
+}
+
+// execution begins in main()
+
+public static void main(String[] x) {
+copyconstructor s1 = new copyconstructor("Khushboo", 20), s2 = new copyconstructor(s1);
+System.out.println(s2.name+" "+s2.age);
+}
+}`,
+"CreateClassShowingExample.java", "Khushboo 20"],
+    [23, "Enter roll no, name and class of 10 students from the user, but roll no should be generated automatically",
+`import java.util.Scanner;
+// program to test the classes above by making objects and calling their methods
+class studentrecords {
+static int counter = 0;
+int rollNo;
+String name, cls;
+// constructor: sets roll no, name, cls
+studentrecords(String n, String c) {
+rollNo = ++counter;
+name = n;
+cls = c;
+}
+
+// execution begins in main()
+
+public static void main(String[] a) {
+Scanner sc = new Scanner(System.in);
+studentrecords[] s = new studentrecords[10];
+// loop i from 0 to 9
+for (int i = 0; i < 10; i++) {
+System.out.print("Name: ");
+String n = sc.next();
+System.out.print("Class: ");
+String c = sc.next();
+s[i] = new studentrecords(n, c);
+}
+// take each x from s one by one
+for (studentrecords x : s) System.out.println(x.rollNo+" "+x.name+" "+x.cls);
+}
+}`,
+"EnterRollNoName.java", "Name: Ravi\nClass: 10A\nName: Anu\nClass: 10A\nName: Meena\nClass: 10B\nName: Karan\nClass: 10B\nName: Sita\nClass: 10C\nName: Rohan\nClass: 10C\nName: Neha\nClass: 10A\nName: Amit\nClass: 10B\nName: Pooja\nClass: 10C\nName: Vikas\nClass: 10A\n1 Ravi 10A\n2 Anu 10A\n3 Meena 10B\n4 Karan 10B\n5 Sita 10C\n6 Rohan 10C\n7 Neha 10A\n8 Amit 10B\n9 Pooja 10C\n10 Vikas 10A"],
+    [24, "Class showing the area of circle and rectangle by method overloading",
+`// program to test the classes above by making objects and calling their methods
+class overloading {
+// returns the area
+double area(double r) {
+return Math.PI * r * r;
+}              // circle
+// returns the area
+double area(double l, double b) {
+return l * b;
+}              // rectangle
+
+// execution begins in main()
+
+public static void main(String[] a) {
+overloading x = new overloading();
+System.out.println(x.area(5)+" "+x.area(4, 6));
+}
+}`,
+"ClassShowingAreaCircle.java", "78.53981633974483 24.0"],
+    [25, "Class entering the command line arguments from the user and showing all the arguments as output",
+`// program to test the classes above by making objects and calling their methods
+class cmdargs {
+
+// execution begins in main()
+
+public static void main(String[] args) {
+System.out.println("Number of arguments: "+args.length);
+// take each s from args one by one
+for (String s : args) System.out.println(s);
+}
+}
+// run: java cmdargs hello java world`,
+"ClassEnteringCommandLine.java", "Number of arguments: 0"],
+    [26, "Class Person with private name, age, country and public getters/setters.",
+`// class person: keeps name, country, age
+class Person {
+private String name, country;
+private int age;
+// returns the name
+public String getName() {
+return name;
+}
+// sets the name
+public void setName(String n) {
+name = n;
+}
+// returns the age
+public int getAge() {
+return age;
+}
+// sets the age
+public void setAge(int a) {
+if (a > 0) age = a;
+}
+// returns the country
+public String getCountry() {
+return country;
+}
+// sets the country
+public void setCountry(String c) {
+country = c;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class personprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Person p = new Person();
+p.setName("Ravi");
+p.setAge(20);
+p.setCountry("India");
+System.out.println(p.getName() + ", " + p.getAge() + ", " + p.getCountry());
+}
+}`,
+"personprivate.java", "Ravi, 20, India"],
+    [27, "Class BankAccount with private accountNumber and balance, public getters and setters",
+`// class bankaccount: keeps account number, balance
+class BankAccount {
+private String accountNumber;
+private double balance;
+// returns the account number
+public String getAccountNumber() {
+return accountNumber;
+}
+// sets the account number
+public void setAccountNumber(String n) {
+accountNumber = n;
+}
+// returns the balance
+public double getBalance() {
+return balance;
+}
+// sets the balance
+public void setBalance(double b) {
+if (b >= 0) balance = b;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class bankprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+BankAccount b = new BankAccount();
+b.setAccountNumber("SB1001");
+b.setBalance(5000);
+System.out.println(b.getAccountNumber() + " balance: " + b.getBalance());
+}
+}`,
+"bankprivate.java", "SB1001 balance: 5000.0"],
+    [28, "Class Rectangle with private length and width, public getters and setters",
+`// class rectangle: keeps length, width
+class Rectangle {
+private double length, width;
+// returns the length
+public double getLength() {
+return length;
+}
+// sets the length
+public void setLength(double l) {
+if (l > 0) length = l;
+}
+// returns the width
+public double getWidth() {
+return width;
+}
+// sets the width
+public void setWidth(double w) {
+if (w > 0) width = w;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class rectangleprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Rectangle r = new Rectangle();
+r.setLength(8);
+r.setWidth(5);
+System.out.println("Length=" + r.getLength() + ", Width=" + r.getWidth() + ", Area=" + (r.getLength() * r.getWidth()));
+}
+}`,
+"rectangleprivate.java", "Length=8.0, Width=5.0, Area=40.0"],
+    [29, "Class Employee with private employee_id, employee_name, employee_salary; getters/setters for id and name; getter for salary returns a formatted string",
+`// class employee: keeps employee id, employee name, employee salary
+class Employee {
+private int employee_id;
+private String employee_name;
+private double employee_salary;
+// constructor: sets employee id, employee name, employee salary
+Employee(int i, String n, double s) {
+employee_id = i;
+employee_name = n;
+employee_salary = s;
+}
+// returns the employee id
+public int getEmployee_id() {
+return employee_id;
+}
+// sets the employee id
+public void setEmployee_id(int i) {
+employee_id = i;
+}
+// returns the employee name
+public String getEmployee_name() {
+return employee_name;
+}
+// sets the employee name
+public void setEmployee_name(String n) {
+employee_name = n;
+}
+// returns the employee salary
+public String getEmployee_salary() {
+return String.format("Rs. %,.2f", employee_salary);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class employeeprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Employee e = new Employee(101, "Ravi", 45000.5);
+System.out.println(e.getEmployee_id() + " " + e.getEmployee_name() + " " + e.getEmployee_salary());
+}
+}`,
+"employeeprivate.java", "101 Ravi Rs. 45,000.50"],
+    [30, "Class Circle with private radius, getter and setter, plus calculateArea() and calculatePerimeter()",
+`// class circle: keeps radius
+class Circle {
+private double radius;
+// returns the radius
+public double getRadius() {
+return radius;
+}
+// sets the radius
+public void setRadius(double r) {
+if (r > 0) radius = r;
+}
+// calculates the area and returns it
+public double calculateArea() {
+return Math.PI * radius * radius;
+}
+// calculates the perimeter and returns it
+public double calculatePerimeter() {
+return 2 * Math.PI * radius;
+}
+}
+// program to test the classes above by making objects and calling their methods
+class circleprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Circle c = new Circle();
+c.setRadius(7);
+System.out.println("Area = " + c.calculateArea());
+System.out.println("Perimeter = " + c.calculatePerimeter());
+}
+}`,
+"circleprivate.java", "Area = 153.93804002589985\nPerimeter = 43.982297150257104"],
+    [31, "Class Car with private company_name, model_name, year, mileage; getters/setters for the first three, only a getter for mileage",
+`// class car: keeps company name, model name, year, mileage
+class Car {
+private String company_name, model_name;
+private int year;
+private double mileage;
+// constructor: sets company name, model name, year, mileage
+Car(String c, String m, int y, double mil) {
+company_name = c;
+model_name = m;
+year = y;
+mileage = mil;
+}
+// returns the company name
+public String getCompany_name() {
+return company_name;
+}
+// sets the company name
+public void setCompany_name(String c) {
+company_name = c;
+}
+// returns the model name
+public String getModel_name() {
+return model_name;
+}
+// sets the model name
+public void setModel_name(String m) {
+model_name = m;
+}
+// returns the year
+public int getYear() {
+return year;
+}
+// sets the year
+public void setYear(int y) {
+year = y;
+}
+// returns the mileage
+public double getMileage() {
+return mileage;
+}     // no setter
+}
+// program to test the classes above by making objects and calling their methods
+class carprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Car c = new Car("Honda", "City", 2022, 18.5);
+System.out.println(c.getCompany_name() + " " + c.getModel_name() + " " + c.getYear() + " mileage " + c.getMileage());
+c.setYear(2023);
+System.out.println("Updated year: " + c.getYear());
+}
+}`,
+"carprivate.java", "Honda City 2022 mileage 18.5\nUpdated year: 2023"],
+    [32, "Class Student with private student_id, student_name, grades; getters/setters for id and name; addGrade() with validation",
+`// class student: keeps student id, student name
+class Student {
+private int student_id;
+private String student_name;
+private java.util.List<Integer> grades = new java.util.ArrayList<>();
+// returns the student id
+public int getStudent_id() {
+return student_id;
+}
+// sets the student id
+public void setStudent_id(int i) {
+student_id = i;
+}
+// returns the student name
+public String getStudent_name() {
+return student_name;
+}
+// sets the student name
+public void setStudent_name(String n) {
+student_name = n;
+}
+// adds the grade
+public void addGrade(int g) {
+if (g >= 0 && g <= 100) grades.add(g);
+else System.out.println("Invalid grade: "+g);
+}
+}
+// program to test the classes above by making objects and calling their methods
+class studentprivate {
+
+// execution begins in main()
+
+public static void main(String[] args) throws Exception {
+Student s = new Student();
+s.setStudent_id(1);
+s.setStudent_name("Khushboo");
+s.addGrade(85);
+s.addGrade(120);
+s.addGrade(92);
+System.out.println(s.getStudent_id() + " " + s.getStudent_name());
+}
+}`,
+"studentprivate.java", "Invalid grade: 120\n1 Khushboo"]
+  ]
+  },
+];
+
+var wrapper = document.getElementById('topics-wrapper');
+
+// Create one question and its answer.
+function makeQuestion(q) {
+  var item = document.createElement("div");
+  item.className = "qa-item";
+
+  var question = document.createElement("button");
+  question.className = "question-btn";
+  question.textContent = "Q" + q[0] + ". " + q[1];
+
+  var answer = document.createElement("div");
+  answer.className = "answer-panel";
+
+  var code = q[2];
+
+  var bar = document.createElement("div");
+  bar.className = "codebar";
+  bar.innerHTML = "<strong>Ans:</strong><span></span><button type='button'>Copy code</button>";
+  bar.children[1].textContent = q[3];
+
+  var copyButton = bar.lastChild;
+  copyButton.onclick = function () {
+    navigator.clipboard.writeText(code);
+    copyButton.textContent = "Copied";
+    setTimeout(function () {
+      copyButton.textContent = "Copy code";
+    }, 1400);
+  };
+
+  var codeBox = document.createElement("pre");
+  codeBox.className = "src";
+
+  var codeText = document.createElement("code");
+  codeText.textContent = code;
+  codeBox.appendChild(codeText);
+
+  answer.appendChild(bar);
+  answer.appendChild(codeBox);
+
+  if (q[4]) {
+    var outputTitle = document.createElement("div");
+    outputTitle.className = "out-label";
+    outputTitle.textContent = "OUTPUT";
+
+    var output = document.createElement("pre");
+    output.className = "term";
+    output.textContent = q[4];
+
+    answer.appendChild(outputTitle);
+    answer.appendChild(output);
+  }
+
+  question.onclick = function () {
+    item.classList.toggle("open");
+  };
+
+  item.appendChild(question);
+  item.appendChild(answer);
+  return item;
+}
+
+// Show all topics and their questions.
+for (var i = 0; i < topics.length; i++) {
+  var topic = topics[i];
+
+  var section = document.createElement("div");
+  section.className = "topic-section";
+
+  var topicButton = document.createElement("button");
+  topicButton.className = "topic-btn";
+  topicButton.textContent = topic.name;
+
+  var questions = document.createElement("div");
+  questions.className = "questions-container";
+
+  for (var j = 0; j < topic.questions.length; j++) {
+    questions.appendChild(makeQuestion(topic.questions[j]));
+  }
+
+  topicButton.onclick = function () {
+    var wasOpen = this.parentNode.classList.contains("open");
+    var openTopics = document.querySelectorAll(".topic-section");
+
+    for (var k = 0; k < openTopics.length; k++) {
+      openTopics[k].classList.remove("open");
+    }
+
+    if (!wasOpen) {
+      this.parentNode.classList.add("open");
+      this.parentNode.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  section.appendChild(topicButton);
+  section.appendChild(questions);
+  wrapper.appendChild(section);
+}
+
+// Set the page theme and let the button switch it.
+var themeButton = document.getElementById("theme-btn");
+
+if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  document.documentElement.setAttribute("data-theme", "dark");
+} else {
+  document.documentElement.setAttribute("data-theme", "light");
+}
+
+themeButton.onclick = function () {
+  var currentTheme = document.documentElement.getAttribute("data-theme");
+
+  if (currentTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+};
+</script>
+</body>
+
+</html>
